@@ -1,17 +1,50 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-import { togglePassword } from '../../utils';
+import { togglePassword, showAlert } from '../../utils';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-const Login = () => {
+interface Props {
+  studentBaseUrl: string;
+}
+
+const Login: React.FC<Props> = ({ studentBaseUrl }) => {
+  const navigate = useNavigate();
+
   const matricRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [pwdHidden, setPwdHidden] = useState(true);
 
-  const login = () => {};
+  const login = () => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: studentBaseUrl,
+    };
+
+    const payload = {
+      password: passwordRef.current?.value,
+      matricNumber: matricRef.current?.value.toLowerCase(),
+    };
+
+    axios
+      .post('/login', payload, generalInfoConfig)
+      .then(res => {
+        const response: { token: string; user: object } = res.data;
+        console.log(response);
+        navigate('/student/home');
+      })
+      .catch((error: AxiosError) => {
+        const errorCode = error.response!.status;
+
+        if (errorCode === 409) {
+          showAlert('Please fill in the empty fields');
+        } else {
+          showAlert(error.message);
+        }
+      });
+  };
 
   return (
     <main className='w-screen h-screen px-[35px] flex flex-col items-center justify-center'>

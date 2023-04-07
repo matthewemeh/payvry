@@ -1,7 +1,14 @@
 import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-const SignUp = () => {
+import { showAlert } from '../../utils';
+
+interface Props {
+  studentBaseUrl: string;
+}
+
+const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
   const navigate = useNavigate();
 
   const matricRef = useRef<HTMLInputElement>(null);
@@ -10,7 +17,27 @@ const SignUp = () => {
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
   const signUp = () => {
-    navigate('/student/create-pin');
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: studentBaseUrl,
+    };
+
+    const payload = {
+      fullName: fullNameRef.current?.value,
+      password: passwordRef.current?.value,
+      phoneNumber: phoneNumberRef.current?.value,
+      matricNumber: matricRef.current?.value.toLowerCase(),
+    };
+
+    axios
+      .post('/signup', payload, generalInfoConfig)
+      .then(res => {
+        const response: { token: string; user: object } = res.data;
+        console.log(response);
+        navigate('/student/create-pin');
+      })
+      .catch((error: AxiosError) => {
+        showAlert(error.message);
+      });
   };
 
   return (

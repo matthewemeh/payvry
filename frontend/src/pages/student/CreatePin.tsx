@@ -1,27 +1,57 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-const CreatePin = () => {
-  const usernameRef = useRef<HTMLInputElement>(null);
+import { showAlert } from '../../utils';
 
-  const signIn = () => {};
+interface Props {
+  studentBaseUrl: string;
+}
+
+const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
+  const navigate = useNavigate();
+  const pinRef = useRef<HTMLInputElement>(null);
+
+  const signIn = () => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: studentBaseUrl,
+    };
+
+    const payload = {
+      pin: pinRef.current?.value,
+      token: '',
+    };
+
+    axios
+      .post('/setpin', payload, generalInfoConfig)
+      .then(res => {
+        const response: { message: string } = res.data;
+        console.log(response);
+        navigate('/student/create-pin');
+      })
+      .catch((error: AxiosError) => {
+        showAlert(error.message);
+      });
+  };
 
   return (
     <main className='w-screen h-screen px-[35px] flex flex-col items-center justify-center'>
       <h1 className='font-semibold text-[34px] leading-[44px] tracking-[0.04em] text-black'>
-        Let's create your 4-digit payment pin
+        Let's create your 6-digit payment pin
       </h1>
 
       <p className='font-medium text-[16px] leading-[27px] tracking-[0.06em] text-[rgba(0,0,0,0.5)] pt-[21px]'>
-        Your 4-digit pin will serve as your payment pin. Try not to disclose to anyone.
+        Your 6-digit pin will serve as your payment pin. Try not to disclose to anyone.
       </p>
 
       <div className='font-light text-[13px] leading-4 tracking-[0.06em] mt-[54px] max-w-[400px]'>
         <input
           type='text'
-          ref={usernameRef}
+          ref={pinRef}
+          maxLength={6}
           autoCorrect='off'
           autoComplete='off'
-          placeholder='4-digit pin'
+          placeholder='6-digit pin'
           className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5'
         />
 

@@ -1,7 +1,14 @@
 import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-const SignUp = () => {
+import { showAlert } from '../../utils';
+
+interface Props {
+  vendorBaseUrl: string;
+}
+
+const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
   const navigate = useNavigate();
 
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -11,7 +18,28 @@ const SignUp = () => {
   const vendorOwnerNameRef = useRef<HTMLInputElement>(null);
 
   const signUp = () => {
-    navigate('/vendor/create-pin');
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+
+    const payload = {
+      password: passwordRef.current?.value,
+      vendorName: vendorNameRef.current?.value,
+      vendorUsername: usernameRef.current?.value,
+      phoneNumber: phoneNumberRef.current?.value,
+      vendorOwner: vendorOwnerNameRef.current?.value,
+    };
+
+    axios
+      .post('/signup', payload, generalInfoConfig)
+      .then(res => {
+        const response = res.data;
+        console.log(response);
+        navigate('/vendor/create-pin');
+      })
+      .catch((error: AxiosError) => {
+        showAlert(error.message);
+      });
   };
 
   return (
