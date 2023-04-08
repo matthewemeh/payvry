@@ -41,7 +41,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
   };
 
   return (
-    <main className='w-screen h-screen px-[35px] flex flex-col items-center justify-center'>
+    <main className='w-screen min-h-screen px-[35px] flex flex-col items-center justify-center'>
       <h1 className='font-semibold text-[34px] leading-[44px] tracking-[0.04em] text-black'>
         Let's set up your account to get started
       </h1>
@@ -66,7 +66,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
         />
 
         <input
-          type='tel'
+          type='text'
           autoCorrect='off'
           autoComplete='off'
           ref={phoneNumberRef}

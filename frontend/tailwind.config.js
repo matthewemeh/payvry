@@ -13,7 +13,15 @@ module.exports = {
       fontFamily: {
         'sf-rounded-pro': ['SF Pro Rounded', 'sans-serif'],
       },
-      colors: { 'fountain-blue': '#4dbdc1', 'mine-shaft': '#3a3a3a', 'grey-200': '#eeeeee' },
+      colors: {
+        alto: '#d9d9d9',
+        carnation: '#fd5a5d',
+        'grey-200': '#eeeeee',
+        'mine-shaft': '#3a3a3a',
+        'alto-shade-1': '#d8d8d8',
+        'fountain-blue': '#4dbdc1',
+        'mountain-meadow': '#13ad95',
+      },
       keyframes: {
         loading: {
           '0%': { width: '0%', backgroundColor: '#00002d' },

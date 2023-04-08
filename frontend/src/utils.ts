@@ -27,3 +27,45 @@ export const showAlert = (
     }, duration);
   }
 };
+
+export const toggleClass = (el: Element, ...classes: string[]) => {
+  classes.forEach(className => el.classList.toggle(className));
+};
+
+export const addClass = (el: Element, ...classes: string[]) => {
+  classes.forEach(className => el.classList.add(className));
+};
+
+export const removeClass = (el: Element, ...classes: string[]) => {
+  classes.forEach(className => el.classList.remove(className));
+};
+
+export const showInfo = (classTarget?: string, yPos?: number, xPos?: number) => {
+  const infoBubbles = document.querySelectorAll('.info-bubble');
+  const infoBubblesContainer = document.querySelector('.info-bubbles-container') as HTMLDivElement;
+
+  // close all info bubbles...
+  infoBubbles.forEach(infoBubble => {
+    addClass(infoBubble, 'hidden');
+  });
+  addClass(infoBubblesContainer, 'hidden');
+
+  if (!classTarget) return;
+
+  const currentInfoBubble = document.querySelector(classTarget) as HTMLDivElement;
+  if (!currentInfoBubble) return;
+
+  // ...then reveal chosen info bubble...
+  toggleClass(currentInfoBubble, 'hidden');
+
+  if (xPos) {
+    currentInfoBubble.style.left = `${xPos}px`;
+  }
+
+  if (yPos) {
+    currentInfoBubble.style.top = `${yPos}px`;
+  }
+
+  // ...afterwards block-off interaction with other elements
+  removeClass(infoBubblesContainer, 'hidden');
+};
