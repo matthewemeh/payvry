@@ -7,6 +7,8 @@ import { togglePassword, showAlert } from '../../utils';
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
+import BackButton from '../../components/BackButton';
+
 interface Props {
   studentBaseUrl: string;
 }
@@ -51,6 +53,8 @@ const Login: React.FC<Props> = ({ studentBaseUrl }) => {
       <h1 className='font-semibold text-[34px] leading-[44px] tracking-[0.04em] text-black'>
         Just a little more
       </h1>
+
+      <BackButton />
 
       <p className='font-medium text-[16px] leading-[27px] tracking-[0.06em] text-[rgba(0,0,0,0.5)] pt-[21px]'>
         You are one step away to a seamless payment experience.

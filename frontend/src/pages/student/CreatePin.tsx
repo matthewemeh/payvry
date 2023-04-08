@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { showAlert } from '../../utils';
+import BackButton from '../../components/BackButton';
 
 interface Props {
   studentBaseUrl: string;
@@ -39,6 +40,7 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
       <h1 className='font-semibold text-[34px] leading-[44px] tracking-[0.04em] text-black'>
         Let's create your 6-digit payment pin
       </h1>
+      <BackButton />
 
       <p className='font-medium text-[16px] leading-[27px] tracking-[0.06em] text-[rgba(0,0,0,0.5)] pt-[21px]'>
         Your 6-digit pin will serve as your payment pin. Try not to disclose to anyone.

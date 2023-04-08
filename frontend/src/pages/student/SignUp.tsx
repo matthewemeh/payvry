@@ -4,6 +4,8 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { showAlert } from '../../utils';
 
+import BackButton from '../../components/BackButton';
+
 interface Props {
   studentBaseUrl: string;
 }
@@ -45,6 +47,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
       <h1 className='font-semibold text-[34px] leading-[44px] tracking-[0.04em] text-black'>
         Let's set up your account to get started
       </h1>
+      <BackButton />
 
       <div className='font-light text-[13px] leading-4 tracking-[0.06em] mt-[54px] max-w-[400px]'>
         <input

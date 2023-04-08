@@ -4,8 +4,10 @@ import axios, { AxiosRequestConfig } from 'axios';
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { togglePassword } from '../../utils';
 import { User } from '../../interfaces';
+import { togglePassword } from '../../utils';
+
+import BackButton from '../../components/BackButton';
 
 interface Props {
   user: User;
@@ -43,6 +45,7 @@ const Profile: React.FC<Props> = ({ user, studentBaseUrl }) => {
   return (
     <main className='min-h-screen px-5 pt-14 pb-[100px] flex flex-col items-center'>
       <h1 className='font-semibold text-[20px] leading-[26px]'>Profile</h1>
+      <BackButton />
 
       <div className='font-semibold text-[13px] leading-4 tracking-[0.06em] mt-[57px] max-w-[400px] flex flex-col gap-y-5'>
         <label htmlFor='matric'>

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 
-import { HistoryDuration } from '../../types';
 import { User } from '../../interfaces';
+import { HistoryDuration } from '../../types';
+
+import BackButton from '../../components/BackButton';
 import HistoryPanel from '../../components/student/HistoryPanel';
 
 import paidImage from '../../assets/svgs/paid.svg';
@@ -37,6 +39,7 @@ const History: React.FC<Props> = ({ user }) => {
   return (
     <main className='min-h-screen px-4 mt-14 mb-5'>
       <h1 className='text-center font-semibold text-[20px] leading-[26px]'>History</h1>
+      <BackButton />
 
       <div className='info-bubble menu hidden bg-white w-[355px] fixed z-[1] p-[30px] pr-[102px] rounded-[30px] border-[1px] border-alto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <h3 className='font-semibold text-[20px] leading-[26px]'>Select a Duration</h3>

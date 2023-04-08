@@ -7,6 +7,7 @@ import chatImage from '../../assets/svgs/chat.svg';
 import { User } from '../../interfaces';
 import { togglePassword } from '../../utils';
 
+import BackButton from '../../components/BackButton';
 import HistoryPanel from '../../components/student/HistoryPanel';
 
 interface Props {
@@ -19,6 +20,8 @@ const Home: React.FC<Props> = ({ user }) => {
 
   return (
     <main className='px-5 pt-[59px] tracking-[0.04em] pb-[57px]'>
+      <BackButton />
+
       <header className='flex items-center justify-between text-center'>
         <div className='w-[50px] h-[50px] rounded-full grid place-items-center border-[1px] border-alto'>
           <img src={userImage} alt='' />
