@@ -8,7 +8,10 @@ import HomeStudent from './pages/student/Home';
 import LoginStudent from './pages/student/Login';
 import SignUpStudent from './pages/student/SignUp';
 import HistoryStudent from './pages/student/History';
+import ProfileStudent from './pages/student/Profile';
 import CreatePinStudent from './pages/student/CreatePin';
+import SendMoneyStudent from './pages/student/SendMoney';
+import ReceiveMoneyStudent from './pages/student/ReceiveMoney';
 
 import HomeVendor from './pages/vendor/Home';
 import LoginVendor from './pages/vendor/Login';
@@ -55,9 +58,13 @@ const history: HistoryData[] = [
 
 const user: User = {
   history,
+  pin: '123456',
   name: 'Joseph',
   balance: 168260,
   clientType: 'student',
+  password: 'jiffy101#',
+  phoneNumber: '09061281792',
+  matricNumber: 'clu200203-442',
 };
 
 const App = () => {
@@ -72,7 +79,7 @@ const App = () => {
         <Route path='/' element={<Landing />}></Route>
 
         <Route path='/student/home' element={<HomeStudent user={user} />}></Route>
-        <Route path='/student/history' element={<HistoryStudent history={history} />}></Route>
+        <Route path='/student/history' element={<HistoryStudent user={user} />}></Route>
         <Route
           path='/student/login'
           element={<LoginStudent studentBaseUrl={baseURLs.student} />}
@@ -85,6 +92,12 @@ const App = () => {
           path='/student/create-pin'
           element={<CreatePinStudent studentBaseUrl={baseURLs.student} />}
         ></Route>
+        <Route
+          path='/student/profile'
+          element={<ProfileStudent user={user} studentBaseUrl={baseURLs.student} />}
+        ></Route>
+        <Route path='/student/send-money' element={<SendMoneyStudent />}></Route>
+        <Route path='/student/receive-money' element={<ReceiveMoneyStudent />}></Route>
 
         <Route path='/vendor/home' element={<HomeVendor />}></Route>
         <Route path='/vendor/login' element={<LoginVendor />}></Route>

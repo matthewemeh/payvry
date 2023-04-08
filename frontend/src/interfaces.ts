@@ -14,8 +14,12 @@ export interface ExtraStyle {
 }
 
 export interface User {
+  pin: string;
   name: string;
   balance: number;
+  password: string;
+  phoneNumber: string;
+  matricNumber: string;
   clientType: ClientType;
   history: HistoryData[];
 }

@@ -28,7 +28,7 @@ const CreatePin = () => {
 
         <button
           onClick={signIn}
-          className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-5'
+          className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-5 font-medium text-[15px] leading-[18px] tracking-[0.06em]'
         >
           Sign in
         </button>

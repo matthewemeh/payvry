@@ -91,7 +91,7 @@ const Login: React.FC<Props> = ({ studentBaseUrl }) => {
 
         <button
           onClick={login}
-          className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-[22px]'
+          className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-[22px] font-medium text-[15px] leading-[18px] tracking-[0.06em]'
         >
           Login
         </button>
