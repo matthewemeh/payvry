@@ -13,13 +13,23 @@ export interface ExtraStyle {
   [key: string]: string | number;
 }
 
-export interface User {
+export interface Student {
   pin: string;
   name: string;
   balance: number;
   password: string;
   phoneNumber: string;
   matricNumber: string;
-  clientType: ClientType;
+  history: HistoryData[];
+}
+
+export interface Vendor {
+  pin: string;
+  name: string;
+  username: string;
+  balance: number;
+  password: string;
+  vendorName: string;
+  phoneNumber: string;
   history: HistoryData[];
 }
