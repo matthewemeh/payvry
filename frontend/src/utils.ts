@@ -41,6 +41,8 @@ export const removeClass = (el: Element, ...classes: string[]) => {
 };
 
 export const showInfo = (classTarget?: string, yPos?: number, xPos?: number) => {
+  // when this function is called without a classTarget, it closes all open info-bubbles
+
   const infoBubbles = document.querySelectorAll('.info-bubble');
   const infoBubblesContainer = document.querySelector('.info-bubbles-container') as HTMLDivElement;
 
