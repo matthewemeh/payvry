@@ -4,11 +4,11 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        '840px': { max: '840px' },
-        '640px': { max: '640px' },
-        '600px': { max: '600px' },
-        '500px': { max: '500px' },
-        '430px': { max: '430px' },
+        tablets: { max: '840px' },
+        'sm-tablets': { max: '640px' },
+        phones: { max: '600px' },
+        'sm-phones': { max: '500px' },
+        'xs-phones': { max: '430px' },
       },
       fontFamily: {
         'sf-rounded-pro': ['SF Pro Rounded', 'sans-serif'],
@@ -16,6 +16,7 @@ module.exports = {
       colors: {
         alto: '#d9d9d9',
         carnation: '#fd5a5d',
+        gallery: '#eeeeee',
         'grey-200': '#eeeeee',
         'mine-shaft': '#3a3a3a',
         'athens-gray': '#eeeff2',
