@@ -14,9 +14,12 @@ module.exports = {
         'sf-rounded-pro': ['SF Pro Rounded', 'sans-serif'],
       },
       colors: {
+        gray: '#808080',
         alto: '#d9d9d9',
-        carnation: '#fd5a5d',
+        silver: '#c4c4c4',
         gallery: '#eeeeee',
+        carnation: '#fd5a5d',
+        'wild-sand': '#f4f4f4',
         'grey-200': '#eeeeee',
         'mine-shaft': '#3a3a3a',
         'athens-gray': '#eeeff2',
