@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig } from 'axios';
 
 import eyeImage from '../../assets/svgs/eye.svg';
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
+  const navigate = useNavigate();
   const { name, phoneNumber, password, username, vendorName } = user;
 
   const [pwdHidden, setPwdHidden] = useState(true);
@@ -37,7 +39,9 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
       phoneNumber: phoneNumberRef.current?.value,
       vendorOwner: vendorOwnerNameRef.current?.value,
     };
+
     // implement update of student's details using axios here
+    navigate('/vendor');
   };
 
   return (

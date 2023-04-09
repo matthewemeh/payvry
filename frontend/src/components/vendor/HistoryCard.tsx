@@ -31,6 +31,7 @@ const HistoryCard: React.FC<Props> = ({
   const matricRef = useRef<HTMLInputElement>(null);
 
   const refund = () => {
+    // logic for refunding should be implemented here
     showInfo();
   };
 
@@ -44,7 +45,7 @@ const HistoryCard: React.FC<Props> = ({
         <h3 className='font-semibold text-[20px] leading-[26px]'>
           Enter the matric number below to process refund
         </h3>
-        <p className='mt-[11px] text-[16px] leading-7 text-[rgba(0,0,0,0.5)]'>{title}</p>
+        <p className='mt-[11px] text-[16px] leading-7 text-[rgba(0,0,0,0.5)] capitalize'>{title}</p>
         <input
           type='text'
           ref={matricRef}
@@ -76,7 +77,7 @@ const HistoryCard: React.FC<Props> = ({
       >
         C{transactionAmount.toLocaleString()}
       </p>
-      <p className='text-left text-[14px] leading-6 font-medium'>{title}</p>
+      <p className='text-left text-[14px] leading-6 font-medium capitalize'>{title}</p>
       <p
         className={`capitalize text-right ${
           transactionType === 'credit' ? 'text-mountain-meadow' : 'text-carnation'

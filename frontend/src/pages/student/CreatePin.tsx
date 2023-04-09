@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
@@ -17,18 +18,25 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: studentBaseUrl,
     };
+    const token = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert('An error occured while creating your pin');
+      navigate('/student/login');
+      return;
+    }
 
     const payload = {
+      token,
       pin: pinRef.current?.value,
-      token: '',
     };
 
     axios
       .post('/setpin', payload, generalInfoConfig)
       .then(res => {
         const response: { message: string } = res.data;
-        console.log(response);
-        navigate('/student/create-pin');
+        showAlert(response.message);
+        navigate('/student');
       })
       .catch((error: AxiosError) => {
         showAlert(error.message);

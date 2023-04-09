@@ -1,10 +1,12 @@
 import { useRef } from 'react';
+import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { showAlert } from '../../utils';
-
 import BackButton from '../../components/BackButton';
+
+import { Student } from '../../interfaces';
 
 interface Props {
   studentBaseUrl: string;
@@ -24,17 +26,17 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
     };
 
     const payload = {
-      fullName: fullNameRef.current?.value,
-      password: passwordRef.current?.value,
-      phoneNumber: phoneNumberRef.current?.value,
-      matricNumber: matricRef.current?.value.toLowerCase(),
+      fullName: fullNameRef.current!.value,
+      password: passwordRef.current!.value,
+      phoneNumber: phoneNumberRef.current!.value,
+      matricNumber: matricRef.current!.value.toLowerCase(),
     };
 
     axios
       .post('/signup', payload, generalInfoConfig)
       .then(res => {
-        const response: { token: string; user: object } = res.data;
-        console.log(response);
+        const response: { token: string; student: Student } = res.data;
+        Cookies.set('token-payvry', response.token);
         navigate('/student/create-pin');
       })
       .catch((error: AxiosError) => {

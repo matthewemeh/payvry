@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
@@ -8,6 +9,8 @@ import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import BackButton from '../../components/BackButton';
+
+import { Student } from '../../interfaces';
 
 interface Props {
   studentBaseUrl: string;
@@ -26,16 +29,16 @@ const Login: React.FC<Props> = ({ studentBaseUrl }) => {
     };
 
     const payload = {
-      password: passwordRef.current?.value,
-      matricNumber: matricRef.current?.value.toLowerCase(),
+      password: passwordRef.current!.value,
+      matricNumber: matricRef.current!.value.toLowerCase(),
     };
 
     axios
       .post('/login', payload, generalInfoConfig)
       .then(res => {
-        const response: { token: string; user: object } = res.data;
-        console.log(response);
-        navigate('/student/home');
+        const response: { token: string; student: Student } = res.data;
+        Cookies.set('token-payvry', response.token);
+        navigate('/student');
       })
       .catch((error: AxiosError) => {
         const errorCode = error.response!.status;

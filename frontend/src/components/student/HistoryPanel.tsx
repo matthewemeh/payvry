@@ -33,18 +33,18 @@ const HistoryPanel: React.FC<Props> = ({ history, panelExpanded, extraStyles }) 
 
       {history
         .slice(0, MAX_HISTORY)
-        .map(({ id, date, description, transactionAmount, transactionType, title }, index) => {
+        .map(({ _id, date_time, amount, alert, vendor, status }, index) => {
           return (
             <HistoryCard
-              id={id}
-              key={id}
-              date={date}
-              title={title}
+              id={_id}
+              key={_id}
               index={index}
-              description={description}
+              title={vendor}
+              date={date_time}
+              description={status}
+              transactionType={alert}
+              transactionAmount={amount}
               panelExpanded={panelExpanded}
-              transactionType={transactionType}
-              transactionAmount={transactionAmount}
             />
           );
         })}

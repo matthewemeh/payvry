@@ -1,21 +1,29 @@
-import { useRef, useState } from 'react';
-import axios, { AxiosRequestConfig } from 'axios';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import { useRef, useState, useEffect } from 'react';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { Student } from '../../interfaces';
-import { togglePassword } from '../../utils';
+import { HistoryData, Student } from '../../interfaces';
+import { showAlert, togglePassword } from '../../utils';
 
 import BackButton from '../../components/BackButton';
 
 interface Props {
-  user: Student;
   studentBaseUrl: string;
 }
 
-const Profile: React.FC<Props> = ({ user, studentBaseUrl }) => {
-  const { name, matricNumber, phoneNumber, password, pin } = user;
+const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
+  const navigate = useNavigate();
+  const token = Cookies.get('token-payvry');
+
+  const [pin, setPin] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [matricNumber, setMatricNumber] = useState('');
 
   const [pwdHidden, setPwdHidden] = useState(true);
   const [pinHidden, setPinHidden] = useState(true);
@@ -40,7 +48,36 @@ const Profile: React.FC<Props> = ({ user, studentBaseUrl }) => {
     };
 
     // implement update of student's details using axios here
+    navigate('/student');
   };
+
+  // componentDidMount
+  useEffect(() => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: studentBaseUrl,
+    };
+
+    if (!token) {
+      showAlert('An error occured while accessing your details');
+      navigate('/student');
+      return;
+    }
+
+    const payload = { token };
+
+    axios
+      .post('/user', payload, generalInfoConfig)
+      .then(res => {
+        const response: { studentTransaction: HistoryData[]; student: Student; message: string } =
+          res.data;
+        setPin(response.student.pin);
+        setFullName(response.student.fullName);
+        setPassword(response.student.password);
+        setPhoneNumber(response.student.phoneNumber);
+        setMatricNumber(response.student.matricNumber);
+      })
+      .catch((error: AxiosError) => showAlert(error.message));
+  }, []);
 
   return (
     <main className='min-h-screen px-5 pt-14 pb-[100px] flex flex-col items-center'>
@@ -71,7 +108,7 @@ const Profile: React.FC<Props> = ({ user, studentBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Full name'
-            defaultValue={name}
+            defaultValue={fullName}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>

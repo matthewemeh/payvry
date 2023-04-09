@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-import { Student } from '../../interfaces';
 import { HistoryDuration } from '../../types';
+import { HistoryData, Student } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 import HistoryPanel from '../../components/student/HistoryPanel';
@@ -10,14 +13,18 @@ import paidImage from '../../assets/svgs/paid.svg';
 import receivedImage from '../../assets/svgs/received.svg';
 import caretDownImage from '../../assets/svgs/caret-down.svg';
 
-import { showInfo } from '../../utils';
+import { showAlert, showInfo } from '../../utils';
 
 interface Props {
-  user: Student;
+  studentBaseUrl: string;
 }
 
-const History: React.FC<Props> = ({ user }) => {
-  const { balance, history } = user;
+const History: React.FC<Props> = ({ studentBaseUrl }) => {
+  const navigate = useNavigate();
+  const token = Cookies.get('token-payvry');
+
+  const [balance, setBalance] = useState(0);
+  const [history, setHistory] = useState<HistoryData[]>([]);
   const durationOptions: HistoryDuration[] = [
     'last 7 days',
     'last 30 days',
@@ -26,15 +33,40 @@ const History: React.FC<Props> = ({ user }) => {
     'all-time',
   ];
   const [duration, setDuration] = useState<HistoryDuration>('all-time');
-  const totalTransactions = history.length;
-  const creditPercentage =
-    (history.filter(({ transactionType }) => transactionType === 'credit').length /
-      totalTransactions) *
-    100;
-  const debitPercentage =
-    (history.filter(({ transactionType }) => transactionType === 'debit').length /
-      totalTransactions) *
-    100;
+  const totalTransactions = useMemo(() => history.length, [history]);
+  const creditPercentage = useMemo(
+    () => (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 ?? 0,
+    [history]
+  );
+  const debitPercentage = useMemo(
+    () => (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 ?? 0,
+    [history]
+  );
+
+  // componentDidMount
+  useEffect(() => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: studentBaseUrl,
+    };
+
+    if (!token) {
+      showAlert('An error occured while accessing history');
+      navigate('/student');
+      return;
+    }
+
+    const payload = { token };
+
+    axios
+      .post('/user', payload, generalInfoConfig)
+      .then(res => {
+        const response: { studentTransaction: HistoryData[]; student: Student; message: string } =
+          res.data;
+        setHistory(response.studentTransaction);
+        setBalance(response.student.balance);
+      })
+      .catch((error: AxiosError) => showAlert(error.message));
+  }, []);
 
   return (
     <main className='min-h-screen px-4 mt-14 mb-5'>

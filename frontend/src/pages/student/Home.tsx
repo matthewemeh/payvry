@@ -1,22 +1,56 @@
-import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import userImage from '../../assets/svgs/user.svg';
 import chatImage from '../../assets/svgs/chat.svg';
 
-import { Student } from '../../interfaces';
-import { togglePassword } from '../../utils';
+import { HistoryData, Student } from '../../interfaces';
+import { showAlert, togglePassword } from '../../utils';
 
 import HistoryPanel from '../../components/student/HistoryPanel';
 
 interface Props {
-  user: Student;
+  studentBaseUrl: string;
 }
 
-const Home: React.FC<Props> = ({ user }) => {
-  const { name, balance, history } = user;
+const Home: React.FC<Props> = ({ studentBaseUrl }) => {
+  const navigate = useNavigate();
+
+  const token = Cookies.get('token-payvry');
   const balanceRef = useRef<HTMLInputElement>(null);
+
+  const [balance, setBalance] = useState(0);
+  const [fullName, setFullName] = useState('');
+  const [history, setHistory] = useState<HistoryData[]>([]);
+
+  // componentDidMount
+  useEffect(() => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: studentBaseUrl,
+    };
+
+    if (!token) {
+      showAlert('An error occured while getting your details');
+      navigate('/student/login');
+      return;
+    }
+
+    const payload = { token };
+
+    axios
+      .post('/user', payload, generalInfoConfig)
+      .then(res => {
+        const response: { studentTransaction: HistoryData[]; student: Student; message: string } =
+          res.data;
+        setHistory(response.studentTransaction);
+        setFullName(response.student.fullName);
+        setBalance(response.student.balance);
+      })
+      .catch((error: AxiosError) => showAlert(error.message));
+  }, []);
 
   return (
     <main className='px-5 pt-[59px] tracking-[0.04em] pb-[57px]'>
@@ -28,7 +62,7 @@ const Home: React.FC<Props> = ({ user }) => {
           <img src={userImage} alt='' />
         </Link>
 
-        <h1 className='font-semibold text-[18px] leading-[30px]'>Hello {name}</h1>
+        <h1 className='font-semibold text-[18px] leading-[30px]'>Hello {fullName}</h1>
 
         <Link
           to='/student/profile'

@@ -49,7 +49,7 @@ const HistoryCard: React.FC<Props> = ({
       >
         C{transactionAmount.toLocaleString()}
       </p>
-      <p className='text-left text-[14px] leading-6 font-medium'>{title}</p>
+      <p className='text-left text-[14px] leading-6 font-medium capitalize'>{title}</p>
       <p
         className={`capitalize text-right ${
           transactionType === 'credit' ? 'text-mountain-meadow' : 'text-carnation'

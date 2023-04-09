@@ -30,13 +30,9 @@ const History: React.FC<Props> = ({ user }) => {
   const [duration, setDuration] = useState<HistoryDuration>('all-time');
   const totalTransactions = history.length;
   const creditPercentage =
-    (history.filter(({ transactionType }) => transactionType === 'credit').length /
-      totalTransactions) *
-    100;
+    (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 ?? 0;
   const debitPercentage =
-    (history.filter(({ transactionType }) => transactionType === 'debit').length /
-      totalTransactions) *
-    100;
+    (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 ?? 0;
 
   return (
     <main className='min-h-screen px-4 mt-14 mb-5'>
