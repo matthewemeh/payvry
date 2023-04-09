@@ -8,3 +8,5 @@ export type HistoryDuration =
   | 'last 14 days'
   | 'last 30 days'
   | 'last 3 months';
+
+export type PaymentType = 'refund' | 'purchase' | 'withdrawal' | 'account top-up';

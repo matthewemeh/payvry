@@ -1,4 +1,4 @@
-import { TransactionStatus, TransactionType } from './types';
+import { PaymentType, TransactionStatus, TransactionType } from './types';
 
 export interface HistoryData {
   _id: string;
@@ -37,4 +37,12 @@ export interface Vendor {
   vendorName: string;
   phoneNumber: string;
   history: HistoryData[];
+}
+
+export interface Transaction {
+  to: string;
+  from: string;
+  date: string;
+  studentName: string;
+  paymentType: PaymentType;
 }
