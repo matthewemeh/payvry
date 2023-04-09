@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { showAlert } from '../../utils';
+import BackButton from '../../components/BackButton';
 
 interface Props {
   vendorBaseUrl: string;
@@ -43,10 +44,11 @@ const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
   };
 
   return (
-    <main className='w-screen min-h-screen px-[35px] flex flex-col items-center justify-center'>
+    <main className='w-screen min-h-screen px-[35px] pt-[4%] flex flex-col items-center justify-center sm-phones:pt-[30%]'>
       <h1 className='font-semibold text-[34px] leading-[44px] tracking-[0.04em] text-black'>
         Let's set up your account to get started
       </h1>
+      <BackButton />
 
       <div className='font-light text-[13px] leading-4 tracking-[0.06em] mt-[54px] max-w-[400px]'>
         <input

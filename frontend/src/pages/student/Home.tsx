@@ -1,17 +1,17 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import userImage from '../../assets/svgs/user.svg';
 import chatImage from '../../assets/svgs/chat.svg';
 
-import { User } from '../../interfaces';
+import { Student } from '../../interfaces';
 import { togglePassword } from '../../utils';
 
-import BackButton from '../../components/BackButton';
 import HistoryPanel from '../../components/student/HistoryPanel';
 
 interface Props {
-  user: User;
+  user: Student;
 }
 
 const Home: React.FC<Props> = ({ user }) => {
@@ -20,18 +20,22 @@ const Home: React.FC<Props> = ({ user }) => {
 
   return (
     <main className='px-5 pt-[59px] tracking-[0.04em] pb-[57px]'>
-      <BackButton />
-
       <header className='flex items-center justify-between text-center'>
-        <div className='w-[50px] h-[50px] rounded-full grid place-items-center border-[1px] border-alto'>
+        <Link
+          to='/student/profile'
+          className='w-[50px] h-[50px] rounded-full grid place-items-center border-[1px] border-alto'
+        >
           <img src={userImage} alt='' />
-        </div>
+        </Link>
 
         <h1 className='font-semibold text-[18px] leading-[30px]'>Hello {name}</h1>
 
-        <div className='w-[50px] h-[50px] rounded-full grid place-items-center border-[1px] border-alto'>
+        <Link
+          to='/student/profile'
+          className='w-[50px] h-[50px] rounded-full grid place-items-center border-[1px] border-alto'
+        >
           <img src={chatImage} alt='' />
-        </div>
+        </Link>
       </header>
 
       <div className='flex flex-col items-center gap-y-5 mt-[10px]'>

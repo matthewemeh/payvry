@@ -6,18 +6,21 @@ import { togglePassword } from '../../utils';
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
+import BackButton from '../../components/BackButton';
+
 const Login = () => {
+  const [pwdHidden, setPwdHidden] = useState(true);
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [pwdHidden, setPwdHidden] = useState(true);
 
   const login = () => {};
 
   return (
-    <main className='w-screen min-h-screen px-[35px] flex flex-col items-center justify-center'>
+    <main className='w-screen min-h-screen px-[35px] flex flex-col items-center justify-center sm-phones:pt-[30%]'>
       <h1 className='font-semibold text-[34px] leading-[44px] tracking-[0.04em] text-black'>
         Just a little more
       </h1>
+      <BackButton />
 
       <p className='font-medium text-[16px] leading-[27px] tracking-[0.06em] text-[rgba(0,0,0,0.5)] pt-[21px]'>
         You are one step away to a managing your sales.

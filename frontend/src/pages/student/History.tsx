@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { User } from '../../interfaces';
+import { Student } from '../../interfaces';
 import { HistoryDuration } from '../../types';
 
 import BackButton from '../../components/BackButton';
@@ -13,7 +13,7 @@ import caretDownImage from '../../assets/svgs/caret-down.svg';
 import { showInfo } from '../../utils';
 
 interface Props {
-  user: User;
+  user: Student;
 }
 
 const History: React.FC<Props> = ({ user }) => {

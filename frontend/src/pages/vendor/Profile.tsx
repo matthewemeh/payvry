@@ -4,41 +4,39 @@ import axios, { AxiosRequestConfig } from 'axios';
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { Student } from '../../interfaces';
+import { Vendor } from '../../interfaces';
 import { togglePassword } from '../../utils';
 
 import BackButton from '../../components/BackButton';
 
 interface Props {
-  user: Student;
-  studentBaseUrl: string;
+  user: Vendor;
+  vendorBaseUrl: string;
 }
 
-const Profile: React.FC<Props> = ({ user, studentBaseUrl }) => {
-  const { name, matricNumber, phoneNumber, password, pin } = user;
+const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
+  const { name, phoneNumber, password, username, vendorName } = user;
 
   const [pwdHidden, setPwdHidden] = useState(true);
-  const [pinHidden, setPinHidden] = useState(true);
 
-  const pinRef = useRef<HTMLInputElement>(null);
-  const matricRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const fullNameRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const vendorNameRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
+  const vendorOwnerNameRef = useRef<HTMLInputElement>(null);
 
   const update = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL: vendorBaseUrl,
     };
 
     const payload = {
-      pin: pinRef.current?.value,
-      fullName: fullNameRef.current?.value,
       password: passwordRef.current?.value,
+      vendorName: vendorNameRef.current?.value,
+      vendorUsername: usernameRef.current?.value,
       phoneNumber: phoneNumberRef.current?.value,
-      matricNumber: matricRef.current?.value.toLowerCase(),
+      vendorOwner: vendorOwnerNameRef.current?.value,
     };
-
     // implement update of student's details using axios here
   };
 
@@ -48,29 +46,43 @@ const Profile: React.FC<Props> = ({ user, studentBaseUrl }) => {
       <BackButton />
 
       <div className='font-semibold text-[13px] leading-4 tracking-[0.06em] mt-[57px] max-w-[400px] flex flex-col gap-y-5'>
-        <label htmlFor='matric'>
-          <span className='mx-5'>Matric number</span>
+        <label htmlFor='username'>
+          <span className='mx-5'>Vendor username</span>
           <input
-            id='matric'
+            id='username'
             type='text'
-            ref={matricRef}
+            ref={usernameRef}
             autoCorrect='off'
             autoComplete='off'
-            placeholder='Matric number'
-            defaultValue={matricNumber.toUpperCase()}
+            placeholder="Vendor's username"
+            defaultValue={username}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
 
-        <label htmlFor='full-name'>
-          <span className='mx-5'>Full name</span>
+        <label htmlFor='vendor-name'>
+          <span className='mx-5'>Vendor name</span>
           <input
-            id='full-name'
+            id='vendor-name'
             type='text'
-            ref={fullNameRef}
+            ref={vendorNameRef}
             autoCorrect='off'
             autoComplete='off'
-            placeholder='Full name'
+            placeholder='Vendor name'
+            defaultValue={vendorName}
+            className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
+          />
+        </label>
+
+        <label htmlFor='vendor-owner-name'>
+          <span className='mx-5'>Vendor owner's name</span>
+          <input
+            id='vendor-owner-name'
+            type='text'
+            ref={vendorOwnerNameRef}
+            autoCorrect='off'
+            autoComplete='off'
+            placeholder="Vendor owner's name"
             defaultValue={name}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
@@ -109,29 +121,6 @@ const Profile: React.FC<Props> = ({ user, studentBaseUrl }) => {
               setPwdHidden(!pwdHidden);
             }}
             src={pwdHidden ? eyeImage : eyeSlashImage}
-            className='w-5 h-5 absolute top-[55%] right-[17px] cursor-pointer'
-          />
-        </label>
-
-        <label htmlFor='pin' className='relative'>
-          <span className='mx-5'>Pin</span>
-          <input
-            id='pin'
-            type='password'
-            ref={pinRef}
-            autoCorrect='off'
-            autoComplete='off'
-            placeholder='Enter your 6-digit pin'
-            defaultValue={pin}
-            className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
-          />
-          <img
-            alt=''
-            onClick={() => {
-              togglePassword(pinRef);
-              setPinHidden(!pinHidden);
-            }}
-            src={pinHidden ? eyeImage : eyeSlashImage}
             className='w-5 h-5 absolute top-[55%] right-[17px] cursor-pointer'
           />
         </label>
