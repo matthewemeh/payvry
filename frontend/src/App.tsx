@@ -21,6 +21,9 @@ import ProfileVendor from './pages/vendor/Profile';
 import CreatePinVendor from './pages/vendor/CreatePin';
 import ReceiveMoneyVendor from './pages/vendor/ReceiveMoney';
 
+import Admin from './pages/admin/Admin';
+import HomeAdmin from './pages/admin/Home';
+
 // this information should be fetched and stored using useState and
 // then made available throughout the application.
 // this is just dummy data
@@ -151,6 +154,9 @@ const App = () => {
           element={<ProfileVendor user={user2} vendorBaseUrl={baseURLs.vendor} />}
         ></Route>
         <Route path='/vendor/receive-money' element={<ReceiveMoneyVendor />}></Route>
+
+        <Route path='/admin' element={<Admin />}></Route>
+        <Route path='/admin/home' element={<HomeAdmin />}></Route>
       </Routes>
     </Router>
   );
