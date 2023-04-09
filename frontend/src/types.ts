@@ -2,7 +2,7 @@ export type TransactionType = 'credit' | 'debit';
 
 export type ClientType = 'student' | 'vendor';
 
-export type TransactionDescription = 'money received' | 'service payment' | 'withdrawal';
+export type TransactionDescription = 'money received' | 'service payment' | 'withdrawal' | 'refund';
 
 export type HistoryDuration =
   | 'all-time'
