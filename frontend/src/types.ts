@@ -1,8 +1,6 @@
 export type TransactionType = 'credit' | 'debit';
 
-export type ClientType = 'student' | 'vendor';
-
-export type TransactionDescription = 'money received' | 'service payment' | 'withdrawal' | 'refund';
+export type TransactionStatus = 'completed' | 'pending';
 
 export type HistoryDuration =
   | 'all-time'

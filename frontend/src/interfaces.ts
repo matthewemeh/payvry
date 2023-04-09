@@ -1,12 +1,15 @@
-import { ClientType, TransactionType, TransactionDescription } from './types';
+import { TransactionStatus, TransactionType } from './types';
 
 export interface HistoryData {
-  id: string;
-  date: string;
-  title: string;
-  transactionAmount: number;
-  transactionType: TransactionType;
-  description: TransactionDescription;
+  _id: string;
+  __v?: number;
+  vendor: string;
+  amount: number;
+  user_id: string;
+  date_time: string;
+  alert: TransactionType;
+  transaction_ref: string;
+  status: TransactionStatus;
 }
 
 export interface ExtraStyle {
@@ -14,13 +17,15 @@ export interface ExtraStyle {
 }
 
 export interface Student {
+  _id: string;
+  __v?: number;
   pin: string;
-  name: string;
   balance: number;
+  fullName: string;
   password: string;
   phoneNumber: string;
   matricNumber: string;
-  history: HistoryData[];
+  verificationStatus: boolean;
 }
 
 export interface Vendor {
