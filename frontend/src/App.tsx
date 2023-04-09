@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Landing from './pages/Landing';
 
-import { HistoryData, Student, Vendor } from './interfaces';
+import { HistoryData, Vendor } from './interfaces';
 
 import HomeStudent from './pages/student/Home';
 import LoginStudent from './pages/student/Login';
@@ -27,76 +27,38 @@ import HomeAdmin from './pages/admin/Home';
 // this information should be fetched and stored using useState and
 // then made available throughout the application.
 // this is just dummy data
-const history1: HistoryData[] = [
-  {
-    id: 'D32SASFGD243DF',
-    title: 'Mobile top-up',
-    transactionAmount: 4000,
-    transactionType: 'credit',
-    date: '2023-03-24T17:03:00Z',
-    description: 'money received',
-  },
-  {
-    id: 'ASFD32S3DFGD24',
-    title: 'Blosom Kitchen',
-    transactionAmount: 8000,
-    transactionType: 'debit',
-    date: '2023-03-24T15:03:00Z',
-    description: 'service payment',
-  },
-  {
-    id: 'ASFD32S3DFGD25',
-    title: 'Elon Musk',
-    transactionAmount: 1300,
-    transactionType: 'debit',
-    date: '2023-03-24T03:03:00Z',
-    description: 'withdrawal',
-  },
-  {
-    id: 'ASFD32S3DFGD26',
-    title: 'Deli buds',
-    transactionAmount: 4000,
-    transactionType: 'debit',
-    date: '2023-03-14T13:03:00Z',
-    description: 'service payment',
-  },
-];
 const history2: HistoryData[] = [
   {
-    id: 'D32SASFGD243DF',
-    title: 'CLU200203-442',
-    transactionAmount: 4000,
-    transactionType: 'credit',
-    date: '2023-03-24T17:03:00Z',
-    description: 'money received',
+    amount: 4000,
+    alert: 'credit',
+    vendor: 'top-up',
+    status: 'completed',
+    _id: 'D32SASFGD243DF',
+    user_id: 'odo4343284732r5tio',
+    date_time: '2023-03-24T17:03:00Z',
+    transaction_ref: '$dn32ye8d8h128ex2en2x8ey1e8',
   },
   {
-    id: 'ASFD32S3DFGD24',
-    title: 'Jide Cole',
-    transactionAmount: 100000,
-    transactionType: 'debit',
-    date: '2023-03-24T15:03:00Z',
-    description: 'withdrawal',
+    amount: 100000,
+    alert: 'debit',
+    vendor: 'Jide Cole',
+    status: 'completed',
+    _id: 'ASFD32S3DFGD24',
+    user_id: 'odo4343284732r5tio',
+    date_time: '2023-03-24T15:03:00Z',
+    transaction_ref: '$dn32ye8d8h128ex2en2x8ey1e8',
   },
   {
-    id: 'ASFD32S3DFGD25',
-    title: 'CLU200203-442',
-    transactionAmount: 1000,
-    transactionType: 'debit',
-    date: '2023-03-24T03:03:00Z',
-    description: 'refund',
+    amount: 1000,
+    alert: 'debit',
+    vendor: 'CLU200203-442',
+    status: 'completed',
+    _id: 'ASFD32S3DFGD25',
+    user_id: 'odo4343284732r5tio',
+    date_time: '2023-03-24T03:03:00Z',
+    transaction_ref: '$dn32ye8d8h128ex2en2x8ey1e8',
   },
 ];
-
-const user1: Student = {
-  history: history1,
-  pin: '123456',
-  name: 'Joseph',
-  balance: 168260,
-  password: 'jiffy101#',
-  phoneNumber: '09061281792',
-  matricNumber: 'clu200203-442',
-};
 
 const user2: Vendor = {
   history: history2,
@@ -120,8 +82,11 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Landing />}></Route>
 
-        <Route path='/student/home' element={<HomeStudent user={user1} />}></Route>
-        <Route path='/student/history' element={<HistoryStudent user={user1} />}></Route>
+        <Route path='/student' element={<HomeStudent studentBaseUrl={baseURLs.student} />}></Route>
+        <Route
+          path='/student/history'
+          element={<HistoryStudent studentBaseUrl={baseURLs.student} />}
+        ></Route>
         <Route
           path='/student/login'
           element={<LoginStudent studentBaseUrl={baseURLs.student} />}
@@ -136,12 +101,12 @@ const App = () => {
         ></Route>
         <Route
           path='/student/profile'
-          element={<ProfileStudent user={user1} studentBaseUrl={baseURLs.student} />}
+          element={<ProfileStudent studentBaseUrl={baseURLs.student} />}
         ></Route>
         <Route path='/student/send-money' element={<SendMoneyStudent />}></Route>
         <Route path='/student/receive-money' element={<ReceiveMoneyStudent />}></Route>
 
-        <Route path='/vendor/home' element={<HomeVendor user={user2} />}></Route>
+        <Route path='/vendor' element={<HomeVendor user={user2} />}></Route>
         <Route path='/vendor/history' element={<HistoryVendor user={user2} />}></Route>
         <Route path='/vendor/login' element={<LoginVendor />}></Route>
         <Route
