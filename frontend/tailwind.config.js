@@ -11,7 +11,7 @@ module.exports = {
         'xs-phones': { max: '430px' },
       },
       fontFamily: {
-        'sf-rounded-pro': ['SF Pro Rounded', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
       },
       colors: {
         gray: '#808080',
@@ -27,14 +27,6 @@ module.exports = {
         'fountain-blue': '#4dbdc1',
         'mountain-meadow': '#13ad95',
       },
-      keyframes: {
-        loading: {
-          '0%': { width: '0%', backgroundColor: '#00002d' },
-          '50%': { width: '100%', backgroundColor: '#00ff91' },
-          '100%': { width: '0%', marginLeft: 'auto' },
-        },
-      },
-      animation: { loading: 'loading 3s linear infinite' },
     },
   },
 };
