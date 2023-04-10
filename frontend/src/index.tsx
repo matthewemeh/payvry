@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 
 // For development
-import './main.css';
+// import './main.css';
 
 // For production
-// import './dist.css';
+import './dist.css';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
