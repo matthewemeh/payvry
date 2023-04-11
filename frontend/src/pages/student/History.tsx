@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { HistoryDuration } from '../../types';
@@ -43,6 +43,20 @@ const History: React.FC<Props> = ({ studentBaseUrl }) => {
     [history]
   );
 
+const fullNameRef = useRef<HTMLInputElement>(null);
+const matricNumberRef = useRef<HTMLInputElement>(null);
+const receiptFileRef = useRef<HTMLInputElement>(null);
+const RECEIPT_EMAIL = 'enessyibrahim@gmail.com';
+
+const sendReceipt=e=>{
+e.preventDefault();
+
+// logic for sending receipt to email goes here
+const fullName:string = fullNameRef.current?.value;
+const matricNumber:string = matricNumberRef.current?.value;
+const receiptFile:File = receiptFileRef.current?.files[0];
+}
+
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
@@ -72,6 +86,20 @@ const History: React.FC<Props> = ({ studentBaseUrl }) => {
     <main className='min-h-screen px-4 mt-14 mb-5'>
       <h1 className='text-center font-semibold text-[20px] leading-[26px]'>History</h1>
       <BackButton />
+
+<div className='info-bubble pay-modal hidden bg-white w-[355px] fixed z-[1] p-[30px] rounded-[30px] border-[1px] border-alto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+    <h3 className='font-semibold text-[20px] leading-[26px]’>Account Number: 8252546650</h3>
+<p className='mt-[11px] font-medium text-[16px] leading-7 text-[rgba(0,0,0,0.5)]'>Bank: Moniepoint</p>
+<p>Account Name: Payvry</p>
+<p className='bg-[rgba(253,90,93,0.1)] text-carnation'>The payment description should be <strong>DEPOSIT TO PAYVRY ACCOUNT</strong></p>
+
+<form onSubmit={sendReceipt}>
+<input ref={fullNameRef} type='text' placeholder='Full name' className='' />
+<input ref={matricNumberRef} type='text' placeholder='Matric number' className='' />
+<input ref={receiptFileRef} accept='.jpg, .png' type='file'/>
+<input type='submit' value='Send Receipt' className='' />
+</form>
+</div>
 
       <div className='info-bubble menu hidden bg-white w-[355px] fixed z-[1] p-[30px] pr-[102px] rounded-[30px] border-[1px] border-alto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <h3 className='font-semibold text-[20px] leading-[26px]'>Select a Duration</h3>
