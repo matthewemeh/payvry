@@ -24,11 +24,11 @@ const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
     };
 
     const payload = {
-      password: passwordRef.current?.value,
-      vendorName: vendorNameRef.current?.value,
-      vendorUsername: usernameRef.current?.value,
-      phoneNumber: phoneNumberRef.current?.value,
-      vendorOwner: vendorOwnerNameRef.current?.value,
+      password: passwordRef.current!.value,
+      vendorName: vendorNameRef.current!.value,
+      vendorUsername: usernameRef.current!.value,
+      phoneNumber: phoneNumberRef.current!.value,
+      vendorOwner: vendorOwnerNameRef.current!.value,
     };
 
     axios

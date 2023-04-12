@@ -18,7 +18,7 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: studentBaseUrl,
     };
-    const token = Cookies.get('token-payvry');
+    const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
       showAlert('An error occured while creating your pin');
@@ -28,7 +28,7 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
 
     const payload = {
       token,
-      pin: pinRef.current?.value,
+      pin: pinRef.current!.value,
     };
 
     axios

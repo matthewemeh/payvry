@@ -28,11 +28,11 @@ const History: React.FC<Props> = ({ user }) => {
     'all-time',
   ];
   const [duration, setDuration] = useState<HistoryDuration>('all-time');
-  const totalTransactions = history.length;
-  const creditPercentage =
-    (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 ?? 0;
-  const debitPercentage =
-    (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 ?? 0;
+  const totalTransactions: number = history.length;
+  const creditPercentage: number =
+    (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 || 0;
+  const debitPercentage: number =
+    (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 || 0;
 
   return (
     <main className='min-h-screen px-4 mt-14 mb-5'>

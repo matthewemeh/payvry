@@ -17,13 +17,6 @@ interface Props {
 
 const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
   const navigate = useNavigate();
-  const token = Cookies.get('token-payvry');
-
-  const [pin, setPin] = useState('');
-  const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [matricNumber, setMatricNumber] = useState('');
 
   const [pwdHidden, setPwdHidden] = useState(true);
   const [pinHidden, setPinHidden] = useState(true);
@@ -40,11 +33,11 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
     };
 
     const payload = {
-      pin: pinRef.current?.value,
-      fullName: fullNameRef.current?.value,
-      password: passwordRef.current?.value,
-      phoneNumber: phoneNumberRef.current?.value,
-      matricNumber: matricRef.current?.value.toLowerCase(),
+      pin: pinRef.current!.value,
+      fullName: fullNameRef.current!.value,
+      password: passwordRef.current!.value,
+      phoneNumber: phoneNumberRef.current!.value,
+      matricNumber: matricRef.current!.value.toLowerCase(),
     };
 
     // implement update of student's details using axios here
@@ -56,6 +49,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: studentBaseUrl,
     };
+    const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
       showAlert('An error occured while accessing your details');
@@ -70,11 +64,12 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
       .then(res => {
         const response: { studentTransaction: HistoryData[]; student: Student; message: string } =
           res.data;
-        setPin(response.student.pin);
-        setFullName(response.student.fullName);
-        setPassword(response.student.password);
-        setPhoneNumber(response.student.phoneNumber);
-        setMatricNumber(response.student.matricNumber);
+
+        pinRef.current!.defaultValue = response.student.pin;
+        fullNameRef.current!.defaultValue = response.student.fullName;
+        passwordRef.current!.defaultValue = response.student.password;
+        matricRef.current!.defaultValue = response.student.matricNumber;
+        phoneNumberRef.current!.defaultValue = response.student.phoneNumber;
       })
       .catch((error: AxiosError) => showAlert(error.message));
   }, []);
@@ -94,8 +89,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Matric number'
-            defaultValue={matricNumber.toUpperCase()}
-            className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
+            className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px] uppercase'
           />
         </label>
 
@@ -108,7 +102,6 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Full name'
-            defaultValue={fullName}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
@@ -122,7 +115,6 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Phone number'
-            defaultValue={phoneNumber}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
@@ -136,7 +128,6 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Password'
-            defaultValue={password}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
           <img
@@ -159,7 +150,6 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Enter your 6-digit pin'
-            defaultValue={pin}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
           <img

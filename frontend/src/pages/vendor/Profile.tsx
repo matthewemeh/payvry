@@ -33,11 +33,11 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
     };
 
     const payload = {
-      password: passwordRef.current?.value,
-      vendorName: vendorNameRef.current?.value,
-      vendorUsername: usernameRef.current?.value,
-      phoneNumber: phoneNumberRef.current?.value,
-      vendorOwner: vendorOwnerNameRef.current?.value,
+      password: passwordRef.current!.value,
+      vendorName: vendorNameRef.current!.value,
+      vendorUsername: usernameRef.current!.value,
+      phoneNumber: phoneNumberRef.current!.value,
+      vendorOwner: vendorOwnerNameRef.current!.value,
     };
 
     // implement update of student's details using axios here
