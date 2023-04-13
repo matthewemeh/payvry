@@ -60,3 +60,9 @@ export interface InfoProps {
   yPos?: number;
   classTarget?: string;
 }
+
+export interface UserResponse {
+  message: string;
+  student: Student;
+  studentTransaction: HistoryData[];
+}
