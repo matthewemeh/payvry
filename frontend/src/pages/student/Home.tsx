@@ -72,16 +72,15 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
 
     emailjs
       .sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current!, PUBLIC_KEY)
-      .then(() => showAlert({ msg: 'Your receipt has been sent', zIndex: '5' }))
+      .then(() =>
+        showAlert({
+          zIndex: '5',
+          duration: 5000,
+          msg: 'Payment verification in progress. Your account will be credited once payment is verified',
+        })
+      )
       .catch((error: EmailJSResponseStatus) => {
-        if (error.status === 413) {
-          // maximum email size is 50kb
-          // most likely a large image might be the cause of this error
-          showAlert({
-            zIndex: '5',
-            msg: 'Upload receipt image with smaller file size',
-          });
-        } else if (error.status === 0) {
+        if (error.status === 0) {
           // internet connection issues
           showAlert({
             zIndex: '5',
@@ -123,7 +122,6 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
             <label htmlFor='fullName' className='text-left mt-5 hidden'>
               <span className='block mx-3'>Full name</span>
               <input
-                disabled
                 type='text'
                 id='fullName'
                 name='fullName'
@@ -135,7 +133,6 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
             <label htmlFor='matricNumber' className='text-left mt-5 hidden'>
               <span className='block mx-3'>Matric number</span>
               <input
-                disabled
                 type='text'
                 id='matricNumber'
                 name='matricNumber'
@@ -147,7 +144,6 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
             <label htmlFor='phoneNumber' className='text-left mt-5 hidden'>
               <span className='block mx-3'>Phone number</span>
               <input
-                disabled
                 type='text'
                 id='phoneNumber'
                 name='phoneNumber'
