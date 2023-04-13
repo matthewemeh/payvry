@@ -6,7 +6,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { HistoryData, Student } from '../../interfaces';
+import { UserResponse } from '../../interfaces';
 import { showAlert, togglePassword } from '../../utils';
 
 import BackButton from '../../components/BackButton';
@@ -62,14 +62,15 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
     axios
       .post('/user', payload, generalInfoConfig)
       .then(res => {
-        const response: { studentTransaction: HistoryData[]; student: Student; message: string } =
-          res.data;
+        const response: UserResponse = res.data;
+        const { student } = response;
+        const { pin, fullName, password, matricNumber, phoneNumber } = student;
 
-        pinRef.current!.defaultValue = response.student.pin;
-        fullNameRef.current!.defaultValue = response.student.fullName;
-        passwordRef.current!.defaultValue = response.student.password;
-        matricRef.current!.defaultValue = response.student.matricNumber;
-        phoneNumberRef.current!.defaultValue = response.student.phoneNumber;
+        pinRef.current!.defaultValue = pin;
+        fullNameRef.current!.defaultValue = fullName;
+        passwordRef.current!.defaultValue = password;
+        matricRef.current!.defaultValue = matricNumber;
+        phoneNumberRef.current!.defaultValue = phoneNumber;
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);
