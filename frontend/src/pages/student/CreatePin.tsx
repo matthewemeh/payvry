@@ -21,7 +21,7 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
     const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
-      showAlert('An error occured while creating your pin');
+      showAlert({ msg: 'An error occured while creating your pin' });
       navigate('/student/login');
       return;
     }
@@ -35,11 +35,11 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
       .post('/setpin', payload, generalInfoConfig)
       .then(res => {
         const response: { message: string } = res.data;
-        showAlert(response.message);
+        showAlert({ msg: response.message });
         navigate('/student');
       })
       .catch((error: AxiosError) => {
-        showAlert(error.message);
+        showAlert({ msg: error.message });
       });
   };
 

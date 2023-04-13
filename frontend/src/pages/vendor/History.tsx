@@ -49,7 +49,7 @@ const History: React.FC<Props> = ({ user }) => {
             key={dur}
             onClick={() => {
               setDuration(dur);
-              showInfo();
+              showInfo({});
             }}
             className='block my-[10px] capitalize font-medium text-[16px] leading-[21px]'
           >
@@ -60,7 +60,7 @@ const History: React.FC<Props> = ({ user }) => {
 
       <button
         className='bg-[url(./assets/svgs/menu.svg)] bg-no-repeat bg-center w-1 h-4 absolute right-5 top-[57px]'
-        onClick={e => showInfo('.dots')}
+        onClick={() => showInfo({ classTarget: '.dots' })}
       />
 
       <div className='info-bubble dots text-center bg-white w-[355px] hidden font-medium fixed z-[1] p-[30px] rounded-[30px] border-[1px] border-alto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
@@ -70,7 +70,7 @@ const History: React.FC<Props> = ({ user }) => {
         </p>
         <button
           onClick={() => {
-            showInfo();
+            showInfo({});
             navigate('/vendor/receive-money');
           }}
           className='bg-mine-shaft block rounded-[30px] py-[15px] px-[111px] text-white mt-[30px] text-[15px] leading-[18px] tracking-[0.06em]'
@@ -106,7 +106,7 @@ const History: React.FC<Props> = ({ user }) => {
           </button>
 
           <button
-            onClick={e => showInfo('.menu')}
+            onClick={() => showInfo({ classTarget: '.menu' })}
             className='border-[1px] border-alto w-4/5 min-w-fit col-start-1 col-end-3 rounded-[10px] mt-[5px] py-[5px] px-[10px] capitalize flex items-center justify-center gap-x-[5px]'
           >
             {duration}

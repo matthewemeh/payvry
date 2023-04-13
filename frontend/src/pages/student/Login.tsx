@@ -44,9 +44,9 @@ const Login: React.FC<Props> = ({ studentBaseUrl }) => {
         const errorCode = error.response!.status;
 
         if (errorCode === 409) {
-          showAlert('Please fill in the empty fields');
+          showAlert({ msg: 'Please fill in the empty fields' });
         } else {
-          showAlert(error.message);
+          showAlert({ msg: error.message });
         }
       });
   };

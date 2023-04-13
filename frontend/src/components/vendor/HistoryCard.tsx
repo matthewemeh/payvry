@@ -32,7 +32,7 @@ const HistoryCard: React.FC<Props> = ({
 
   const refund = () => {
     // logic for refunding should be implemented here
-    showInfo();
+    showInfo({});
   };
 
   return (
@@ -87,7 +87,7 @@ const HistoryCard: React.FC<Props> = ({
       </p>
       {transactionType === 'credit' && (
         <button
-          onClick={() => showInfo('.refund')}
+          onClick={() => showInfo({ classTarget: '.refund' })}
           className='bg-[rgba(253,90,93,0.1)] text-carnation col-start-1 col-end-4 rounded-[30px] py-[5px] px-5 max-w-[80px] mx-auto mt-[15px] text-[12px] leading-5'
         >
           Refund

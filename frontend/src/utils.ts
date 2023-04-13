@@ -1,3 +1,5 @@
+import { AlertProps, InfoProps } from './interfaces';
+
 export const togglePassword = (element: React.RefObject<HTMLInputElement>) => {
   const inputElement = element.current;
 
@@ -7,12 +9,13 @@ export const togglePassword = (element: React.RefObject<HTMLInputElement>) => {
   inputElement.type = oldType === 'password' ? 'text' : 'password';
 };
 
-export const showAlert = (
-  msg: string,
+export const showAlert = ({
+  msg,
+  zIndex = '0',
   duration = 4000,
+  textColor = '#fff',
   bgColor = '#181818',
-  textColor = '#fff'
-) => {
+}: AlertProps) => {
   const alert = document.querySelector('#alert') as HTMLDivElement;
 
   // show alert only when alert box is initially hidden
@@ -21,6 +24,8 @@ export const showAlert = (
     alert.style.color = textColor;
     alert.innerHTML = msg;
     alert.style.bottom = '0px';
+
+    if (zIndex !== '0') alert.style.zIndex = zIndex;
 
     setTimeout(() => {
       alert.style.bottom = '-100px';
@@ -40,7 +45,7 @@ export const removeClass = (el: Element, ...classes: string[]) => {
   classes.forEach(className => el.classList.remove(className));
 };
 
-export const showInfo = (classTarget?: string, yPos?: number, xPos?: number) => {
+export const showInfo = ({ classTarget, xPos, yPos }: InfoProps) => {
   // when this function is called without a classTarget, it closes all open info-bubbles
 
   const infoBubbles = document.querySelectorAll('.info-bubble');

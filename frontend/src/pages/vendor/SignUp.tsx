@@ -39,7 +39,7 @@ const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
         navigate('/vendor/create-pin');
       })
       .catch((error: AxiosError) => {
-        showAlert(error.message);
+        showAlert({ msg: error.message });
       });
   };
 

@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { HistoryDuration } from '../../types';
@@ -21,7 +21,6 @@ interface Props {
 
 const History: React.FC<Props> = ({ studentBaseUrl }) => {
   const navigate = useNavigate();
-  const token = Cookies.get('token-payvry');
 
   const [balance, setBalance] = useState(0);
   const [history, setHistory] = useState<HistoryData[]>([]);
@@ -33,38 +32,25 @@ const History: React.FC<Props> = ({ studentBaseUrl }) => {
     'all-time',
   ];
   const [duration, setDuration] = useState<HistoryDuration>('all-time');
-  const totalTransactions = useMemo(() => history.length, [history]);
-  const creditPercentage = useMemo(
-    () => (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 ?? 0,
+  const totalTransactions: number = useMemo(() => history.length, [history]);
+  const creditPercentage: number = useMemo(
+    () => (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 || 0,
     [history]
   );
-  const debitPercentage = useMemo(
-    () => (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 ?? 0,
+  const debitPercentage: number = useMemo(
+    () => (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 || 0,
     [history]
   );
-
-const fullNameRef = useRef<HTMLInputElement>(null);
-const matricNumberRef = useRef<HTMLInputElement>(null);
-const receiptFileRef = useRef<HTMLInputElement>(null);
-const RECEIPT_EMAIL = 'enessyibrahim@gmail.com';
-
-const sendReceipt=e=>{
-e.preventDefault();
-
-// logic for sending receipt to email goes here
-const fullName:string = fullNameRef.current?.value;
-const matricNumber:string = matricNumberRef.current?.value;
-const receiptFile:File = receiptFileRef.current?.files[0];
-}
 
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: studentBaseUrl,
     };
+    const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
-      showAlert('An error occured while accessing history');
+      showAlert({ msg: 'An error occured while accessing history' });
       navigate('/student');
       return;
     }
@@ -79,27 +65,13 @@ const receiptFile:File = receiptFileRef.current?.files[0];
         setHistory(response.studentTransaction);
         setBalance(response.student.balance);
       })
-      .catch((error: AxiosError) => showAlert(error.message));
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);
 
   return (
     <main className='min-h-screen px-4 mt-14 mb-5'>
       <h1 className='text-center font-semibold text-[20px] leading-[26px]'>History</h1>
       <BackButton />
-
-<div className='info-bubble pay-modal hidden bg-white w-[355px] fixed z-[1] p-[30px] rounded-[30px] border-[1px] border-alto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-    <h3 className='font-semibold text-[20px] leading-[26px]’>Account Number: 8252546650</h3>
-<p className='mt-[11px] font-medium text-[16px] leading-7 text-[rgba(0,0,0,0.5)]'>Bank: Moniepoint</p>
-<p>Account Name: Payvry</p>
-<p className='bg-[rgba(253,90,93,0.1)] text-carnation'>The payment description should be <strong>DEPOSIT TO PAYVRY ACCOUNT</strong></p>
-
-<form onSubmit={sendReceipt}>
-<input ref={fullNameRef} type='text' placeholder='Full name' className='' />
-<input ref={matricNumberRef} type='text' placeholder='Matric number' className='' />
-<input ref={receiptFileRef} accept='.jpg, .png' type='file'/>
-<input type='submit' value='Send Receipt' className='' />
-</form>
-</div>
 
       <div className='info-bubble menu hidden bg-white w-[355px] fixed z-[1] p-[30px] pr-[102px] rounded-[30px] border-[1px] border-alto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <h3 className='font-semibold text-[20px] leading-[26px]'>Select a Duration</h3>
@@ -111,7 +83,7 @@ const receiptFile:File = receiptFileRef.current?.files[0];
             key={dur}
             onClick={() => {
               setDuration(dur);
-              showInfo();
+              showInfo({});
             }}
             className='block my-[10px] capitalize font-medium text-[16px] leading-[21px]'
           >
@@ -147,7 +119,7 @@ const receiptFile:File = receiptFileRef.current?.files[0];
           </button>
 
           <button
-            onClick={e => showInfo('.menu')}
+            onClick={() => showInfo({ classTarget: '.menu' })}
             className='border-[1px] border-alto w-4/5 min-w-fit col-start-1 col-end-3 rounded-[10px] mt-[5px] py-[5px] px-[10px] capitalize flex items-center justify-center gap-x-[5px]'
           >
             {duration}

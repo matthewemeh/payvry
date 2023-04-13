@@ -52,7 +52,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
     const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
-      showAlert('An error occured while accessing your details');
+      showAlert({ msg: 'An error occured while accessing your details' });
       navigate('/student');
       return;
     }
@@ -71,7 +71,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
         matricRef.current!.defaultValue = response.student.matricNumber;
         phoneNumberRef.current!.defaultValue = response.student.phoneNumber;
       })
-      .catch((error: AxiosError) => showAlert(error.message));
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);
 
   return (

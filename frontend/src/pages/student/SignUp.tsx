@@ -40,7 +40,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
         navigate('/student/create-pin');
       })
       .catch((error: AxiosError) => {
-        showAlert(error.message);
+        showAlert({ msg: error.message });
       });
   };
 

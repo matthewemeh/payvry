@@ -46,3 +46,17 @@ export interface Transaction {
   studentName: string;
   paymentType: PaymentType;
 }
+
+export interface AlertProps {
+  msg: string;
+  zIndex?: string;
+  bgColor?: string;
+  duration?: number;
+  textColor?: string;
+}
+
+export interface InfoProps {
+  xPos?: number;
+  yPos?: number;
+  classTarget?: string;
+}
