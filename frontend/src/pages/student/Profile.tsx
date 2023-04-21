@@ -6,8 +6,8 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { UserResponse } from '../../interfaces';
 import { showAlert, togglePassword } from '../../utils';
+import { StudentProfileUpdatePayload, StudentResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 
@@ -27,12 +27,12 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
   const fullNameRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
-  const update = () => {
+  const updateProfile = () => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: studentBaseUrl,
     };
 
-    const payload = {
+    const payload: StudentProfileUpdatePayload = {
       pin: pinRef.current!.value,
       fullName: fullNameRef.current!.value,
       password: passwordRef.current!.value,
@@ -62,7 +62,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
     axios
       .post('/user', payload, generalInfoConfig)
       .then(res => {
-        const response: UserResponse = res.data;
+        const response: StudentResponse = res.data;
         const { student } = response;
         const { pin, fullName, password, matricNumber, phoneNumber } = student;
 
@@ -165,7 +165,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
         </label>
 
         <button
-          onClick={update}
+          onClick={updateProfile}
           className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-[10px] font-medium text-[15px] leading-[18px]'
         >
           Update

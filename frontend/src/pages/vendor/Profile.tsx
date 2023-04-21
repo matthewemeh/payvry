@@ -1,23 +1,22 @@
-import { useRef, useState } from 'react';
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import axios, { AxiosRequestConfig } from 'axios';
+import { useRef, useState, useEffect } from 'react';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { Vendor } from '../../interfaces';
-import { togglePassword } from '../../utils';
+import { showAlert, togglePassword } from '../../utils';
+import { VendorProfileUpdatePayload, VendorResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 
 interface Props {
-  user: Vendor;
   vendorBaseUrl: string;
 }
 
-const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
+const Profile: React.FC<Props> = ({ vendorBaseUrl }) => {
   const navigate = useNavigate();
-  const { name, phoneNumber, password, username, vendorName } = user;
 
   const [pwdHidden, setPwdHidden] = useState(true);
 
@@ -25,24 +24,55 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
   const usernameRef = useRef<HTMLInputElement>(null);
   const vendorNameRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
-  const vendorOwnerNameRef = useRef<HTMLInputElement>(null);
+  const vendorOwnerRef = useRef<HTMLInputElement>(null);
 
-  const update = () => {
+  const updateProfile = () => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: vendorBaseUrl,
     };
 
-    const payload = {
+    const payload: VendorProfileUpdatePayload = {
       password: passwordRef.current!.value,
       vendorName: vendorNameRef.current!.value,
       vendorUsername: usernameRef.current!.value,
       phoneNumber: phoneNumberRef.current!.value,
-      vendorOwner: vendorOwnerNameRef.current!.value,
+      vendorOwner: vendorOwnerRef.current!.value,
     };
 
-    // implement update of student's details using axios here
+    // implement update of vendor's details using axios here
     navigate('/vendor');
   };
+
+  // componentDidMount
+  useEffect(() => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+    const token: string | undefined = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert({ msg: 'An error occured while accessing your details' });
+      navigate('/vendor');
+      return;
+    }
+
+    const payload = { token };
+
+    axios
+      .post('/user', payload, generalInfoConfig)
+      .then(res => {
+        const response: VendorResponse = res.data;
+        const { vendor } = response;
+        const { password, phoneNumber, vendorName, vendorOwner, vendorUsername } = vendor;
+
+        passwordRef.current!.defaultValue = password;
+        vendorNameRef.current!.defaultValue = vendorName;
+        vendorOwnerRef.current!.defaultValue = vendorOwner;
+        usernameRef.current!.defaultValue = vendorUsername;
+        phoneNumberRef.current!.defaultValue = phoneNumber;
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+  }, []);
 
   return (
     <main className='min-h-screen px-5 pt-14 pb-[100px] flex flex-col items-center'>
@@ -59,7 +89,6 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder="Vendor's username"
-            defaultValue={username}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
@@ -73,7 +102,6 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Vendor name'
-            defaultValue={vendorName}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
@@ -83,11 +111,10 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
           <input
             id='vendor-owner-name'
             type='text'
-            ref={vendorOwnerNameRef}
+            ref={vendorOwnerRef}
             autoCorrect='off'
             autoComplete='off'
             placeholder="Vendor owner's name"
-            defaultValue={name}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
@@ -101,7 +128,6 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Phone number'
-            defaultValue={phoneNumber}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
@@ -115,7 +141,6 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Password'
-            defaultValue={password}
             className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
           <img
@@ -130,7 +155,7 @@ const Profile: React.FC<Props> = ({ user, vendorBaseUrl }) => {
         </label>
 
         <button
-          onClick={update}
+          onClick={updateProfile}
           className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-[10px] font-medium text-[15px] leading-[18px]'
         >
           Update

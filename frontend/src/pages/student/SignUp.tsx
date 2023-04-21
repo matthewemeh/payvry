@@ -6,7 +6,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { showAlert } from '../../utils';
 import BackButton from '../../components/BackButton';
 
-import { Student } from '../../interfaces';
+import { Student, StudentSignupPayload } from '../../interfaces';
 
 interface Props {
   studentBaseUrl: string;
@@ -25,7 +25,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
       baseURL: studentBaseUrl,
     };
 
-    const payload = {
+    const payload: StudentSignupPayload = {
       fullName: fullNameRef.current!.value,
       password: passwordRef.current!.value,
       phoneNumber: phoneNumberRef.current!.value,
@@ -39,9 +39,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
         Cookies.set('token-payvry', response.token);
         navigate('/student/create-pin');
       })
-      .catch((error: AxiosError) => {
-        showAlert({ msg: error.message });
-      });
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
   return (

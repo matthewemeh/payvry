@@ -1,9 +1,12 @@
 import { useRef } from 'react';
+import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { showAlert } from '../../utils';
 import BackButton from '../../components/BackButton';
+
+import { Vendor, VendorSignupPayload } from '../../interfaces';
 
 interface Props {
   vendorBaseUrl: string;
@@ -16,31 +19,29 @@ const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const vendorNameRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
-  const vendorOwnerNameRef = useRef<HTMLInputElement>(null);
+  const vendorOwnerRef = useRef<HTMLInputElement>(null);
 
   const signUp = () => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: vendorBaseUrl,
     };
 
-    const payload = {
+    const payload: VendorSignupPayload = {
       password: passwordRef.current!.value,
       vendorName: vendorNameRef.current!.value,
       vendorUsername: usernameRef.current!.value,
       phoneNumber: phoneNumberRef.current!.value,
-      vendorOwner: vendorOwnerNameRef.current!.value,
+      vendorOwner: vendorOwnerRef.current!.value,
     };
 
     axios
       .post('/signup', payload, generalInfoConfig)
       .then(res => {
-        const response = res.data;
-        console.log(response);
+        const response: { token: string; vendor: Vendor } = res.data;
+        Cookies.set('token-payvry', response.token);
         navigate('/vendor/create-pin');
       })
-      .catch((error: AxiosError) => {
-        showAlert({ msg: error.message });
-      });
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
   return (
@@ -73,7 +74,7 @@ const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
           type='text'
           autoCorrect='off'
           autoComplete='off'
-          ref={vendorOwnerNameRef}
+          ref={vendorOwnerRef}
           placeholder="Vendor owner's name"
           className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-5'
         />

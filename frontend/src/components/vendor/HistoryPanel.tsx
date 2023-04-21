@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
 import HistoryCard from './HistoryCard';
-import { ExtraStyle, HistoryData } from '../../interfaces';
+import { ExtraStyle, StudentHistoryData } from '../../interfaces';
 
 interface Props {
-  history: HistoryData[];
+  history: StudentHistoryData[];
   panelExpanded?: boolean;
   extraStyles?: ExtraStyle;
 }

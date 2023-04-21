@@ -1,19 +1,47 @@
+import Cookies from 'js-cookie';
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-import { togglePassword } from '../../utils';
+import { showAlert, togglePassword } from '../../utils';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import BackButton from '../../components/BackButton';
 
-const Login = () => {
+import { Vendor, VendorLoginPayload } from '../../interfaces';
+
+interface Props {
+  vendorBaseUrl: string;
+}
+
+const Login: React.FC<Props> = ({ vendorBaseUrl }) => {
+  const navigate = useNavigate();
+
   const [pwdHidden, setPwdHidden] = useState(true);
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const login = () => {};
+  const login = () => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+
+    const payload: VendorLoginPayload = {
+      password: passwordRef.current!.value,
+      vendorUsername: usernameRef.current!.value,
+    };
+
+    axios
+      .post('/login', payload, generalInfoConfig)
+      .then(res => {
+        const response: { token: string; vendor: Vendor } = res.data;
+        Cookies.set('token-payvry', response.token);
+        navigate('/vendor');
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+  };
 
   return (
     <main className='w-screen min-h-screen px-[35px] flex flex-col items-center justify-center sm-phones:pt-[30%]'>

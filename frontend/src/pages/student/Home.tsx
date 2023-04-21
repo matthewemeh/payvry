@@ -7,8 +7,9 @@ import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import eyeImage from '../../assets/svgs/eye.svg';
 import userImage from '../../assets/svgs/user.svg';
 import chatImage from '../../assets/svgs/chat.svg';
+import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { HistoryData, UserResponse } from '../../interfaces';
+import { StudentHistoryData, StudentResponse } from '../../interfaces';
 import { showAlert, showInfo, togglePassword } from '../../utils';
 
 import HistoryPanel from '../../components/student/HistoryPanel';
@@ -21,12 +22,13 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
   const navigate = useNavigate();
 
   const balanceRef = useRef<HTMLInputElement>(null);
+  const [balanceHidden, setBalanceHidden] = useState(true);
 
   const [amount, setAmount] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [matricNumber, setMatricNumber] = useState('');
-  const [history, setHistory] = useState<HistoryData[]>([]);
+  const [history, setHistory] = useState<StudentHistoryData[]>([]);
 
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentMade, setPaymentMade] = useState(false);
@@ -49,7 +51,7 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
     axios
       .post('/user', payload, generalInfoConfig)
       .then(res => {
-        const response: UserResponse = res.data;
+        const response: StudentResponse = res.data;
         const { student, studentTransaction } = response;
         const { fullName, phoneNumber, balance, matricNumber } = student;
 
@@ -205,9 +207,12 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
 
         <img
           alt=''
-          src={eyeImage}
           className='w-6 h-6 cursor-pointer'
-          onClick={() => togglePassword(balanceRef)}
+          onClick={() => {
+            setBalanceHidden(!balanceHidden);
+            togglePassword(balanceRef);
+          }}
+          src={balanceHidden ? eyeImage : eyeSlashImage}
         />
 
         <input

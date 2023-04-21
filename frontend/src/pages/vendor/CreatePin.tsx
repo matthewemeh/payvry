@@ -1,9 +1,45 @@
 import { useRef } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-const CreatePin = () => {
+import { showAlert } from '../../utils';
+import { CreatePinPayload } from '../../interfaces';
+
+interface Props {
+  vendorBaseUrl: string;
+}
+
+const CreatePin: React.FC<Props> = ({ vendorBaseUrl }) => {
+  const navigate = useNavigate();
   const pinRef = useRef<HTMLInputElement>(null);
 
-  const signIn = () => {};
+  const signIn = () => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+    const token: string | undefined = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert({ msg: 'An error occured while creating your pin' });
+      navigate('/vendor/login');
+      return;
+    }
+
+    const payload: CreatePinPayload = {
+      token,
+      pin: pinRef.current!.value,
+    };
+
+    axios
+      .post('/setpin', payload, generalInfoConfig)
+      .then(res => {
+        const response: { message: string } = res.data;
+        showAlert({ msg: response.message });
+        navigate('/vendor');
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+  };
 
   return (
     <main className='w-screen min-h-screen px-[35px] flex flex-col items-center justify-center'>

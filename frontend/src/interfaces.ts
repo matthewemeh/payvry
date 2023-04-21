@@ -1,15 +1,22 @@
-import { PaymentType, TransactionStatus, TransactionType } from './types';
+import { PaymentResponseMessage, PaymentType, TransactionStatus, TransactionType } from './types';
 
-export interface HistoryData {
+interface HistoryData {
   _id: string;
   __v?: number;
-  vendor: string;
   amount: number;
   user_id: string;
   date_time: string;
   alert: TransactionType;
   transaction_ref: string;
   status: TransactionStatus;
+}
+
+export interface StudentHistoryData extends HistoryData {
+  vendor: string;
+}
+
+export interface VendorHistoryData extends HistoryData {
+  student: string;
 }
 
 export interface ExtraStyle {
@@ -29,14 +36,16 @@ export interface Student {
 }
 
 export interface Vendor {
+  _id: string;
+  __v?: number;
   pin: string;
-  name: string;
-  username: string;
   balance: number;
   password: string;
   vendorName: string;
+  vendorOwner: string;
   phoneNumber: string;
-  history: HistoryData[];
+  vendorUsername: string;
+  verificationStatus: boolean;
 }
 
 export interface Transaction {
@@ -61,8 +70,77 @@ export interface InfoProps {
   classTarget?: string;
 }
 
-export interface UserResponse {
+export interface StudentResponse {
   message: string;
   student: Student;
-  studentTransaction: HistoryData[];
+  studentTransaction: StudentHistoryData[];
+}
+
+export interface VendorResponse {
+  message: string;
+  vendor: Vendor;
+  vendorTransaction: StudentHistoryData[];
+}
+
+export interface StudentLoginPayload {
+  password: string;
+  matricNumber: string;
+}
+
+export interface VendorLoginPayload {
+  password: string;
+  vendorUsername: string;
+}
+
+export interface StudentSignupPayload {
+  fullName: string;
+  password: string;
+  phoneNumber: string;
+  matricNumber: string;
+}
+
+export interface VendorSignupPayload {
+  password: string;
+  vendorName: string;
+  phoneNumber: string;
+  vendorOwner: string;
+  vendorUsername: string;
+}
+
+export interface CreatePinPayload {
+  pin: string;
+  token: string;
+}
+
+export interface StudentProfileUpdatePayload {
+  pin: string;
+  fullName: string;
+  password: string;
+  phoneNumber: string;
+  matricNumber: string;
+}
+
+export interface VendorProfileUpdatePayload {
+  password: string;
+  vendorName: string;
+  phoneNumber: string;
+  vendorOwner: string;
+  vendorUsername: string;
+}
+
+export interface PaymentPayload {
+  pin: string;
+  token: string;
+  amount: string;
+  matricNumber: string;
+}
+
+export interface VerifyAccountPayload {
+  token: string;
+  matricNumber: string;
+}
+
+export interface PaymentResponse {
+  message: PaymentResponseMessage;
+  vendorTransaction: VendorHistoryData;
 }

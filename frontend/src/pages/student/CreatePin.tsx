@@ -6,6 +6,8 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { showAlert } from '../../utils';
 import BackButton from '../../components/BackButton';
 
+import { CreatePinPayload } from '../../interfaces';
+
 interface Props {
   studentBaseUrl: string;
 }
@@ -26,7 +28,7 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
       return;
     }
 
-    const payload = {
+    const payload: CreatePinPayload = {
       token,
       pin: pinRef.current!.value,
     };
@@ -38,9 +40,7 @@ const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
         showAlert({ msg: response.message });
         navigate('/student');
       })
-      .catch((error: AxiosError) => {
-        showAlert({ msg: error.message });
-      });
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
   return (

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { HistoryDuration } from '../../types';
-import { HistoryData, UserResponse } from '../../interfaces';
+import { StudentHistoryData, StudentResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 import HistoryPanel from '../../components/student/HistoryPanel';
@@ -23,7 +23,7 @@ const History: React.FC<Props> = ({ studentBaseUrl }) => {
   const navigate = useNavigate();
 
   const [balance, setBalance] = useState(0);
-  const [history, setHistory] = useState<HistoryData[]>([]);
+  const [history, setHistory] = useState<StudentHistoryData[]>([]);
   const durationOptions: HistoryDuration[] = [
     'last 7 days',
     'last 30 days',
@@ -60,12 +60,12 @@ const History: React.FC<Props> = ({ studentBaseUrl }) => {
     axios
       .post('/user', payload, generalInfoConfig)
       .then(res => {
-        const response: UserResponse = res.data;
+        const response: StudentResponse = res.data;
         const { student, studentTransaction } = response;
         const { balance } = student;
 
-        setHistory(studentTransaction);
         setBalance(balance);
+        setHistory(studentTransaction);
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);

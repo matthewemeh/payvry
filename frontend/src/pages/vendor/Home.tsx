@@ -1,22 +1,60 @@
-import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useRef, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import userImage from '../../assets/svgs/user.svg';
 import chatImage from '../../assets/svgs/chat.svg';
+import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { Vendor } from '../../interfaces';
-import { togglePassword } from '../../utils';
+import { StudentHistoryData, VendorResponse } from '../../interfaces';
+import { showAlert, togglePassword } from '../../utils';
 
 import HistoryPanel from '../../components/vendor/HistoryPanel';
 
 interface Props {
-  user: Vendor;
+  vendorBaseUrl: string;
 }
 
-const Home: React.FC<Props> = ({ user }) => {
-  const { name, balance, history } = user;
+const Home: React.FC<Props> = ({ vendorBaseUrl }) => {
+  const navigate = useNavigate();
+
   const balanceRef = useRef<HTMLInputElement>(null);
+  const [balanceHidden, setBalanceHidden] = useState(true);
+
+  const [fullName, setFullName] = useState('');
+  const [history, setHistory] = useState<StudentHistoryData[]>([]);
+
+  // componentDidMount
+  useEffect(() => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+    const token: string | undefined = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert({ msg: 'An error occured while getting your details' });
+      navigate('/vendor/login');
+      return;
+    }
+
+    const payload = { token };
+
+    axios
+      .post('/user', payload, generalInfoConfig)
+      .then(res => {
+        const response: VendorResponse = res.data;
+        const { vendor, vendorTransaction } = response;
+        const { vendorOwner, balance } = vendor;
+
+        balanceRef.current!.value = `C${balance.toLocaleString()}`;
+
+        setFullName(vendorOwner);
+        setHistory(vendorTransaction);
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+  }, []);
 
   return (
     <main className='px-5 pt-[59px] tracking-[0.04em] pb-[57px]'>
@@ -28,7 +66,7 @@ const Home: React.FC<Props> = ({ user }) => {
           <img src={userImage} alt='' />
         </Link>
 
-        <h1 className='font-semibold text-[18px] leading-[30px]'>Hello {name}</h1>
+        <h1 className='font-semibold text-[18px] leading-[30px]'>Hello {fullName}</h1>
 
         <Link
           to='/vendor/profile'
@@ -45,16 +83,19 @@ const Home: React.FC<Props> = ({ user }) => {
 
         <img
           alt=''
-          src={eyeImage}
           className='w-6 h-6 cursor-pointer'
-          onClick={() => togglePassword(balanceRef)}
+          onClick={() => {
+            setBalanceHidden(!balanceHidden);
+            togglePassword(balanceRef);
+          }}
+          src={balanceHidden ? eyeImage : eyeSlashImage}
         />
 
         <input
           disabled
+          value='C0'
           type='password'
           ref={balanceRef}
-          value={`C${balance.toLocaleString()}`}
           className='text-center outline-0 font-semibold text-[34px] leading-[41px] max-w-full'
         />
       </div>

@@ -7,7 +7,7 @@ module.exports = {
     require('autoprefixer'),
     cssnano({ preset: 'default' }),
     purgecss({
-      content: ['./src/*.{ts,tsx}', './src/**/*.{ts,tsx}', './public/*.html'],
+      content: ['./src/**/*.{ts,tsx}', './public/*.html'],
       defaultExtractor: content => content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [],
       safelist: ['bg-[url(./assets/field.svg)]'],
     }),

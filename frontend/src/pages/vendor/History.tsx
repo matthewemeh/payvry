@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-import { Vendor } from '../../interfaces';
 import { HistoryDuration } from '../../types';
+import { StudentHistoryData, VendorResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 import HistoryPanel from '../../components/vendor/HistoryPanel';
@@ -11,15 +13,17 @@ import paidImage from '../../assets/svgs/paid.svg';
 import receivedImage from '../../assets/svgs/received.svg';
 import caretDownImage from '../../assets/svgs/caret-down.svg';
 
-import { showInfo } from '../../utils';
+import { showAlert, showInfo } from '../../utils';
 
 interface Props {
-  user: Vendor;
+  vendorBaseUrl: string;
 }
 
-const History: React.FC<Props> = ({ user }) => {
+const History: React.FC<Props> = ({ vendorBaseUrl }) => {
   const navigate = useNavigate();
-  const { balance, history } = user;
+
+  const [balance, setBalance] = useState(0);
+  const [history, setHistory] = useState<StudentHistoryData[]>([]);
   const durationOptions: HistoryDuration[] = [
     'last 7 days',
     'last 30 days',
@@ -29,10 +33,42 @@ const History: React.FC<Props> = ({ user }) => {
   ];
   const [duration, setDuration] = useState<HistoryDuration>('all-time');
   const totalTransactions: number = history.length;
-  const creditPercentage: number =
-    (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 || 0;
-  const debitPercentage: number =
-    (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 || 0;
+  const creditPercentage: number = useMemo(
+    () => (history.filter(({ alert }) => alert === 'credit').length / totalTransactions) * 100 || 0,
+    [history]
+  );
+  const debitPercentage: number = useMemo(
+    () => (history.filter(({ alert }) => alert === 'debit').length / totalTransactions) * 100 || 0,
+    [history]
+  );
+
+  // componentDidMount
+  useEffect(() => {
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+    const token: string | undefined = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert({ msg: 'An error occured while accessing history' });
+      navigate('/vendor');
+      return;
+    }
+
+    const payload = { token };
+
+    axios
+      .post('/user', payload, generalInfoConfig)
+      .then(res => {
+        const response: VendorResponse = res.data;
+        const { vendor, vendorTransaction } = response;
+        const { balance } = vendor;
+
+        setBalance(balance);
+        setHistory(vendorTransaction);
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+  }, []);
 
   return (
     <main className='min-h-screen px-4 mt-14 mb-5'>

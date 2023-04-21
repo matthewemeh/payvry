@@ -1,14 +1,24 @@
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 import { useRef, useState, useMemo } from 'react';
-import BackButton from '../../components/BackButton';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import eyeImage from '../../assets/svgs/eye.svg';
 import payFailImage from '../../assets/svgs/pay-fail.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 import paySuccessImage from '../../assets/svgs/pay-success.svg';
 
-import { togglePassword } from '../../utils';
+import BackButton from '../../components/BackButton';
 
-const ReceiveMoney = () => {
+import { showAlert, togglePassword } from '../../utils';
+import { PaymentPayload, PaymentResponse, VerifyAccountPayload } from '../../interfaces';
+
+interface Props {
+  vendorBaseUrl: string;
+}
+
+const ReceiveMoney: React.FC<Props> = ({ vendorBaseUrl }) => {
+  const navigate = useNavigate();
   const pinRef = useRef<HTMLInputElement>(null);
 
   const [amount, setAmount] = useState(0);
@@ -23,15 +33,65 @@ const ReceiveMoney = () => {
   const paymentID = useMemo(() => 'D32SASFGD243DF', [paymentSuccessful]);
 
   const verifyAccount = () => {
-    // logic for verifying Account number goes here
-    setAccountVerified(true);
-    setVerifiedOwnerName('Korede Bakare'); // supposed to be a name verified from database
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+
+    const token: string | undefined = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert({ msg: 'An error occured while accessing your details' });
+      navigate('/vendor');
+      return;
+    }
+
+    const payload: VerifyAccountPayload = { token, matricNumber };
+
+    axios
+      .post('/getstudent', payload, generalInfoConfig)
+      .then(res => {
+        const response: { message: string } = res.data;
+        if (response.message) {
+          setAccountVerified(true);
+          setVerifiedOwnerName(response.message);
+        }
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
   const confirmPayment = () => {
-    // logic for confirming payment goes here
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: vendorBaseUrl,
+    };
+
+    const token: string | undefined = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert({ msg: 'An error occured while accessing your details' });
+      navigate('/vendor');
+      return;
+    }
+
+    const payload: PaymentPayload = {
+      token,
+      matricNumber,
+      amount: amount.toString(),
+      pin: pinRef.current!.value,
+    };
+
+    axios
+      .post('/acceptpayment', payload, generalInfoConfig)
+      .then(res => {
+        const response: PaymentResponse = res.data;
+        setPaymentSuccessful(response.vendorTransaction.status === 'completed');
+        showAlert({ msg: response.message });
+      })
+      .catch((error: AxiosError) => {
+        setPaymentSuccessful(false);
+        showAlert({ msg: error.message });
+      });
+
     setPaymentConfirmed(true);
-    setPaymentSuccessful(true);
   };
 
   return (
@@ -82,7 +142,11 @@ const ReceiveMoney = () => {
             type='text'
             value={matricNumber}
             placeholder='Matric number'
-            onChange={e => setMatricNumber(e.target.value)}
+            onChange={e => {
+              setMatricNumber(e.target.value);
+              setAccountVerified(false);
+              setVerifiedOwnerName('');
+            }}
             className='mt-[30px] bg-gallery rounded-[100px] py-[15px] px-5 w-full placeholder:font-light text-[13px] leading-4 placeholder:text-mine-shaft tracking-[0.06em]'
           />
 

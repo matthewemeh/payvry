@@ -10,7 +10,7 @@ import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import BackButton from '../../components/BackButton';
 
-import { Student } from '../../interfaces';
+import { Student, StudentLoginPayload } from '../../interfaces';
 
 interface Props {
   studentBaseUrl: string;
@@ -19,16 +19,16 @@ interface Props {
 const Login: React.FC<Props> = ({ studentBaseUrl }) => {
   const navigate = useNavigate();
 
+  const [pwdHidden, setPwdHidden] = useState(true);
   const matricRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [pwdHidden, setPwdHidden] = useState(true);
 
   const login = () => {
     const generalInfoConfig: AxiosRequestConfig = {
       baseURL: studentBaseUrl,
     };
 
-    const payload = {
+    const payload: StudentLoginPayload = {
       password: passwordRef.current!.value,
       matricNumber: matricRef.current!.value.toLowerCase(),
     };

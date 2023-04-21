@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 export type TransactionType = 'credit' | 'debit';
 
 export type TransactionStatus = 'completed' | 'pending';
@@ -10,3 +12,5 @@ export type HistoryDuration =
   | 'last 3 months';
 
 export type PaymentType = 'refund' | 'purchase' | 'withdrawal' | 'account top-up';
+
+export type PaymentResponseMessage = 'Transaction Completed' | 'Transaction Failed';
