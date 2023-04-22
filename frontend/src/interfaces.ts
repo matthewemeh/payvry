@@ -17,35 +17,32 @@ export interface StudentHistoryData extends HistoryData {
 
 export interface VendorHistoryData extends HistoryData {
   student: string;
+  refund_ref?: string;
 }
 
 export interface ExtraStyle {
   [key: string]: string | number;
 }
 
-export interface Student {
+interface User {
   _id: string;
   __v?: number;
   pin: string;
   balance: number;
-  fullName: string;
   password: string;
   phoneNumber: string;
-  matricNumber: string;
   verificationStatus: boolean;
 }
 
-export interface Vendor {
-  _id: string;
-  __v?: number;
-  pin: string;
-  balance: number;
-  password: string;
+export interface Student extends User {
+  fullName: string;
+  matricNumber: string;
+}
+
+export interface Vendor extends User {
   vendorName: string;
   vendorOwner: string;
-  phoneNumber: string;
   vendorUsername: string;
-  verificationStatus: boolean;
 }
 
 export interface Transaction {
@@ -79,7 +76,7 @@ export interface StudentResponse {
 export interface VendorResponse {
   message: string;
   vendor: Vendor;
-  vendorTransaction: StudentHistoryData[];
+  vendorTransaction: VendorHistoryData[];
 }
 
 export interface StudentLoginPayload {
@@ -143,4 +140,16 @@ export interface VerifyAccountPayload {
 export interface PaymentResponse {
   message: PaymentResponseMessage;
   vendorTransaction: VendorHistoryData;
+}
+
+export interface RefundPayload {
+  token: string;
+  amount: string;
+  matricNumber: string;
+  transaction_ref: string;
+}
+
+export interface RefundResponse {
+  message: string;
+  refundTransaction: VendorHistoryData;
 }

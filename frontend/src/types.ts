@@ -1,6 +1,4 @@
-import { type } from 'os';
-
-export type TransactionType = 'credit' | 'debit';
+export type TransactionType = 'credit' | 'debit' | 'refund';
 
 export type TransactionStatus = 'completed' | 'pending';
 
