@@ -11,12 +11,9 @@ import { StudentProfileUpdatePayload, StudentResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 
-interface Props {
-  studentBaseUrl: string;
-}
-
-const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
+const Profile = () => {
   const navigate = useNavigate();
+  const baseURL = process.env.REACT_APP_STUDENT_API!;
 
   const [pwdHidden, setPwdHidden] = useState(true);
   const [pinHidden, setPinHidden] = useState(true);
@@ -29,7 +26,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
 
   const updateProfile = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL,
     };
 
     const payload: StudentProfileUpdatePayload = {
@@ -47,7 +44,7 @@ const Profile: React.FC<Props> = ({ studentBaseUrl }) => {
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 

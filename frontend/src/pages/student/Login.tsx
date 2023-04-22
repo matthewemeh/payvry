@@ -10,13 +10,9 @@ import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import BackButton from '../../components/BackButton';
 
-import { Student, StudentLoginPayload } from '../../interfaces';
+import { StudentLoginPayload, StudentTokenResponse } from '../../interfaces';
 
-interface Props {
-  studentBaseUrl: string;
-}
-
-const Login: React.FC<Props> = ({ studentBaseUrl }) => {
+const Login = () => {
   const navigate = useNavigate();
 
   const [pwdHidden, setPwdHidden] = useState(true);
@@ -25,7 +21,7 @@ const Login: React.FC<Props> = ({ studentBaseUrl }) => {
 
   const login = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL: process.env.REACT_APP_STUDENT_API!,
     };
 
     const payload: StudentLoginPayload = {
@@ -36,7 +32,7 @@ const Login: React.FC<Props> = ({ studentBaseUrl }) => {
     axios
       .post('/login', payload, generalInfoConfig)
       .then(res => {
-        const response: { token: string; student: Student } = res.data;
+        const response: StudentTokenResponse = res.data;
         Cookies.set('token-payvry', response.token);
         navigate('/student');
       })

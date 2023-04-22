@@ -13,20 +13,17 @@ import BackButton from '../../components/BackButton';
 import { showAlert, togglePassword } from '../../utils';
 import { PaymentPayload, PaymentResponse, VerifyAccountPayload } from '../../interfaces';
 
-interface Props {
-  vendorBaseUrl: string;
-}
-
-const ReceiveMoney: React.FC<Props> = ({ vendorBaseUrl }) => {
+const ReceiveMoney = () => {
   const navigate = useNavigate();
   const pinRef = useRef<HTMLInputElement>(null);
+  const baseURL = process.env.REACT_APP_VENDOR_API!;
 
   const [amount, setAmount] = useState(0);
   const [pinHidden, setPinHidden] = useState(true);
   const [matricNumber, setMatricNumber] = useState('');
+  const [paymentMade, setPaymentMade] = useState(false);
   const [accountVerified, setAccountVerified] = useState(false);
   const [verifiedOwnerName, setVerifiedOwnerName] = useState('');
-  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
   const newDate = useMemo(() => new Date(), [paymentSuccessful]);
@@ -34,7 +31,7 @@ const ReceiveMoney: React.FC<Props> = ({ vendorBaseUrl }) => {
 
   const verifyAccount = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL,
     };
 
     const token: string | undefined = Cookies.get('token-payvry');
@@ -59,9 +56,9 @@ const ReceiveMoney: React.FC<Props> = ({ vendorBaseUrl }) => {
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
-  const confirmPayment = () => {
+  const makePayment = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL,
     };
 
     const token: string | undefined = Cookies.get('token-payvry');
@@ -91,7 +88,7 @@ const ReceiveMoney: React.FC<Props> = ({ vendorBaseUrl }) => {
         showAlert({ msg: error.message });
       });
 
-    setPaymentConfirmed(true);
+    setPaymentMade(true);
   };
 
   return (
@@ -101,7 +98,7 @@ const ReceiveMoney: React.FC<Props> = ({ vendorBaseUrl }) => {
       </h1>
       <BackButton />
 
-      {paymentConfirmed ? (
+      {paymentMade ? (
         <section className='mt-[180px] bg-alto rounded-[30px] p-[10px]'>
           <div className='grid grid-cols-3 gap-y-[15px] bg-white rounded-[20px] py-5 px-[30px] font-medium'>
             <p className='col-start-1 col-end-3 text-[10px] leading-[17px]'>
@@ -185,7 +182,7 @@ const ReceiveMoney: React.FC<Props> = ({ vendorBaseUrl }) => {
           )}
 
           <button
-            onClick={accountVerified ? confirmPayment : verifyAccount}
+            onClick={accountVerified ? makePayment : verifyAccount}
             className='bg-mine-shaft rounded-[100px] py-[15px] px-[88px] whitespace-nowrap text-white mt-[30px] font-medium text-[15px] leading-[18px] tracking-[0.06em] w-full'
           >
             {accountVerified ? 'Confirm Payment' : 'Verify Account'}

@@ -23,65 +23,27 @@ import Admin from './pages/admin/Admin';
 import HomeAdmin from './pages/admin/Home';
 
 const App = () => {
-  const baseURLs = {
-    vendor: process.env.REACT_APP_VENDOR_API!,
-    student: process.env.REACT_APP_STUDENT_API!,
-  };
-
   return (
     <Router>
       <Routes>
         <Route path='/' element={<Landing />}></Route>
 
-        <Route path='/student' element={<HomeStudent studentBaseUrl={baseURLs.student} />}></Route>
-        <Route
-          path='/student/history'
-          element={<HistoryStudent studentBaseUrl={baseURLs.student} />}
-        ></Route>
-        <Route
-          path='/student/login'
-          element={<LoginStudent studentBaseUrl={baseURLs.student} />}
-        ></Route>
-        <Route
-          path='/student/sign-up'
-          element={<SignUpStudent studentBaseUrl={baseURLs.student} />}
-        ></Route>
-        <Route
-          path='/student/create-pin'
-          element={<CreatePinStudent studentBaseUrl={baseURLs.student} />}
-        ></Route>
-        <Route
-          path='/student/profile'
-          element={<ProfileStudent studentBaseUrl={baseURLs.student} />}
-        ></Route>
+        <Route path='/student' element={<HomeStudent />}></Route>
+        <Route path='/student/login' element={<LoginStudent />}></Route>
+        <Route path='/student/sign-up' element={<SignUpStudent />}></Route>
+        <Route path='/student/history' element={<HistoryStudent />}></Route>
+        <Route path='/student/profile' element={<ProfileStudent />}></Route>
+        <Route path='/student/create-pin' element={<CreatePinStudent />}></Route>
         <Route path='/student/send-money' element={<SendMoneyStudent />}></Route>
         <Route path='/student/receive-money' element={<ReceiveMoneyStudent />}></Route>
 
-        <Route path='/vendor' element={<HomeVendor vendorBaseUrl={baseURLs.vendor} />}></Route>
-        <Route
-          path='/vendor/history'
-          element={<HistoryVendor vendorBaseUrl={baseURLs.vendor} />}
-        ></Route>
-        <Route
-          path='/vendor/login'
-          element={<LoginVendor vendorBaseUrl={baseURLs.vendor} />}
-        ></Route>
-        <Route
-          path='/vendor/sign-up'
-          element={<SignUpVendor vendorBaseUrl={baseURLs.vendor} />}
-        ></Route>
-        <Route
-          path='/vendor/create-pin'
-          element={<CreatePinVendor vendorBaseUrl={baseURLs.vendor} />}
-        ></Route>
-        <Route
-          path='/vendor/profile'
-          element={<ProfileVendor vendorBaseUrl={baseURLs.vendor} />}
-        ></Route>
-        <Route
-          path='/vendor/receive-money'
-          element={<ReceiveMoneyVendor vendorBaseUrl={baseURLs.vendor} />}
-        ></Route>
+        <Route path='/vendor' element={<HomeVendor />}></Route>
+        <Route path='/vendor/login' element={<LoginVendor />}></Route>
+        <Route path='/vendor/sign-up' element={<SignUpVendor />}></Route>
+        <Route path='/vendor/history' element={<HistoryVendor />}></Route>
+        <Route path='/vendor/profile' element={<ProfileVendor />}></Route>
+        <Route path='/vendor/create-pin' element={<CreatePinVendor />}></Route>
+        <Route path='/vendor/receive-money' element={<ReceiveMoneyVendor />}></Route>
 
         <Route path='/admin' element={<Admin />}></Route>
         <Route path='/admin/home' element={<HomeAdmin />}></Route>

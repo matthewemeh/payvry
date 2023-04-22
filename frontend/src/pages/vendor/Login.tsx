@@ -10,13 +10,9 @@ import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import BackButton from '../../components/BackButton';
 
-import { Vendor, VendorLoginPayload } from '../../interfaces';
+import { VendorLoginPayload, VendorTokenResponse } from '../../interfaces';
 
-interface Props {
-  vendorBaseUrl: string;
-}
-
-const Login: React.FC<Props> = ({ vendorBaseUrl }) => {
+const Login = () => {
   const navigate = useNavigate();
 
   const [pwdHidden, setPwdHidden] = useState(true);
@@ -25,7 +21,7 @@ const Login: React.FC<Props> = ({ vendorBaseUrl }) => {
 
   const login = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL: process.env.REACT_APP_VENDOR_API!,
     };
 
     const payload: VendorLoginPayload = {
@@ -36,7 +32,7 @@ const Login: React.FC<Props> = ({ vendorBaseUrl }) => {
     axios
       .post('/login', payload, generalInfoConfig)
       .then(res => {
-        const response: { token: string; vendor: Vendor } = res.data;
+        const response: VendorTokenResponse = res.data;
         Cookies.set('token-payvry', response.token);
         navigate('/vendor');
       })

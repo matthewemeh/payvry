@@ -15,11 +15,7 @@ import caretDownImage from '../../assets/svgs/caret-down.svg';
 
 import { showAlert, showInfo } from '../../utils';
 
-interface Props {
-  studentBaseUrl: string;
-}
-
-const History: React.FC<Props> = ({ studentBaseUrl }) => {
+const History = () => {
   const navigate = useNavigate();
 
   const [balance, setBalance] = useState(0);
@@ -45,7 +41,7 @@ const History: React.FC<Props> = ({ studentBaseUrl }) => {
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL: process.env.REACT_APP_STUDENT_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 

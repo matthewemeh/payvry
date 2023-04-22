@@ -6,13 +6,9 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { showAlert } from '../../utils';
 import BackButton from '../../components/BackButton';
 
-import { Student, StudentSignupPayload } from '../../interfaces';
+import { StudentSignupPayload, StudentTokenResponse } from '../../interfaces';
 
-interface Props {
-  studentBaseUrl: string;
-}
-
-const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
+const SignUp = () => {
   const navigate = useNavigate();
 
   const matricRef = useRef<HTMLInputElement>(null);
@@ -22,7 +18,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
 
   const signUp = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL: process.env.REACT_APP_STUDENT_API!,
     };
 
     const payload: StudentSignupPayload = {
@@ -35,7 +31,7 @@ const SignUp: React.FC<Props> = ({ studentBaseUrl }) => {
     axios
       .post('/signup', payload, generalInfoConfig)
       .then(res => {
-        const response: { token: string; student: Student } = res.data;
+        const response: StudentTokenResponse = res.data;
         Cookies.set('token-payvry', response.token);
         navigate('/student/create-pin');
       })

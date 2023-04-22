@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { HistoryDuration } from '../../types';
-import { StudentHistoryData, VendorResponse } from '../../interfaces';
+import { VendorHistoryData, VendorResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 import HistoryPanel from '../../components/vendor/HistoryPanel';
@@ -15,15 +15,11 @@ import caretDownImage from '../../assets/svgs/caret-down.svg';
 
 import { showAlert, showInfo } from '../../utils';
 
-interface Props {
-  vendorBaseUrl: string;
-}
-
-const History: React.FC<Props> = ({ vendorBaseUrl }) => {
+const History = () => {
   const navigate = useNavigate();
 
   const [balance, setBalance] = useState(0);
-  const [history, setHistory] = useState<StudentHistoryData[]>([]);
+  const [history, setHistory] = useState<VendorHistoryData[]>([]);
   const durationOptions: HistoryDuration[] = [
     'last 7 days',
     'last 30 days',
@@ -45,7 +41,7 @@ const History: React.FC<Props> = ({ vendorBaseUrl }) => {
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL: process.env.REACT_APP_VENDOR_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 
@@ -58,7 +54,7 @@ const History: React.FC<Props> = ({ vendorBaseUrl }) => {
     const payload = { token };
 
     axios
-      .post('/user', payload, generalInfoConfig)
+      .post('/vendor', payload, generalInfoConfig)
       .then(res => {
         const response: VendorResponse = res.data;
         const { vendor, vendorTransaction } = response;

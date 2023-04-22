@@ -6,13 +6,9 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { showAlert } from '../../utils';
 import BackButton from '../../components/BackButton';
 
-import { Vendor, VendorSignupPayload } from '../../interfaces';
+import { VendorSignupPayload, VendorTokenResponse } from '../../interfaces';
 
-interface Props {
-  vendorBaseUrl: string;
-}
-
-const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
+const SignUp = () => {
   const navigate = useNavigate();
 
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -23,7 +19,7 @@ const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
 
   const signUp = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL: process.env.REACT_APP_VENDOR_API!,
     };
 
     const payload: VendorSignupPayload = {
@@ -37,7 +33,7 @@ const SignUp: React.FC<Props> = ({ vendorBaseUrl }) => {
     axios
       .post('/signup', payload, generalInfoConfig)
       .then(res => {
-        const response: { token: string; vendor: Vendor } = res.data;
+        const response: VendorTokenResponse = res.data;
         Cookies.set('token-payvry', response.token);
         navigate('/vendor/create-pin');
       })

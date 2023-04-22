@@ -8,28 +8,24 @@ import userImage from '../../assets/svgs/user.svg';
 import chatImage from '../../assets/svgs/chat.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
-import { StudentHistoryData, VendorResponse } from '../../interfaces';
+import { VendorHistoryData, VendorResponse } from '../../interfaces';
 import { showAlert, togglePassword } from '../../utils';
 
 import HistoryPanel from '../../components/vendor/HistoryPanel';
 
-interface Props {
-  vendorBaseUrl: string;
-}
-
-const Home: React.FC<Props> = ({ vendorBaseUrl }) => {
+const Home = () => {
   const navigate = useNavigate();
 
   const balanceRef = useRef<HTMLInputElement>(null);
   const [balanceHidden, setBalanceHidden] = useState(true);
 
   const [fullName, setFullName] = useState('');
-  const [history, setHistory] = useState<StudentHistoryData[]>([]);
+  const [history, setHistory] = useState<VendorHistoryData[]>([]);
 
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL: process.env.REACT_APP_VENDOR_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 
@@ -42,7 +38,7 @@ const Home: React.FC<Props> = ({ vendorBaseUrl }) => {
     const payload = { token };
 
     axios
-      .post('/user', payload, generalInfoConfig)
+      .post('/vendor', payload, generalInfoConfig)
       .then(res => {
         const response: VendorResponse = res.data;
         const { vendor, vendorTransaction } = response;
@@ -101,9 +97,12 @@ const Home: React.FC<Props> = ({ vendorBaseUrl }) => {
       </div>
 
       <div className='text-mine-shaft font-semibold text-[14px] leading-[17px] flex justify-between mt-[30px]'>
-        <button className='py-[14px] px-5 bg-[rgba(190,161,161,0.2)] rounded-[30px]'>
+        <Link
+          to='/vendor/receive-money'
+          className='py-[14px] px-5 bg-[rgba(190,161,161,0.2)] rounded-[30px]'
+        >
           Receive payment
-        </button>
+        </Link>
 
         <button className='py-[14px] px-5 bg-[rgba(190,161,161,0.2)] rounded-[30px]'>
           Withdraw money

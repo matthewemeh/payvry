@@ -4,9 +4,9 @@ import HistoryCard from './HistoryCard';
 import { ExtraStyle, StudentHistoryData } from '../../interfaces';
 
 interface Props {
-  history: StudentHistoryData[];
   panelExpanded?: boolean;
   extraStyles?: ExtraStyle;
+  history: StudentHistoryData[];
 }
 
 const HistoryPanel: React.FC<Props> = ({ history, panelExpanded, extraStyles }) => {

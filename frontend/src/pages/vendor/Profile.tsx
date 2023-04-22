@@ -11,12 +11,9 @@ import { VendorProfileUpdatePayload, VendorResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 
-interface Props {
-  vendorBaseUrl: string;
-}
-
-const Profile: React.FC<Props> = ({ vendorBaseUrl }) => {
+const Profile = () => {
   const navigate = useNavigate();
+  const baseURL = process.env.REACT_APP_VENDOR_API!;
 
   const [pwdHidden, setPwdHidden] = useState(true);
 
@@ -28,7 +25,7 @@ const Profile: React.FC<Props> = ({ vendorBaseUrl }) => {
 
   const updateProfile = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL,
     };
 
     const payload: VendorProfileUpdatePayload = {
@@ -46,7 +43,7 @@ const Profile: React.FC<Props> = ({ vendorBaseUrl }) => {
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 
@@ -59,7 +56,7 @@ const Profile: React.FC<Props> = ({ vendorBaseUrl }) => {
     const payload = { token };
 
     axios
-      .post('/user', payload, generalInfoConfig)
+      .post('/vendor', payload, generalInfoConfig)
       .then(res => {
         const response: VendorResponse = res.data;
         const { vendor } = response;

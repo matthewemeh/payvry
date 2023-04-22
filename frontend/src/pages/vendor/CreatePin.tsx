@@ -6,23 +6,19 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { showAlert } from '../../utils';
 import { CreatePinPayload } from '../../interfaces';
 
-interface Props {
-  vendorBaseUrl: string;
-}
-
-const CreatePin: React.FC<Props> = ({ vendorBaseUrl }) => {
+const CreatePin = () => {
   const navigate = useNavigate();
   const pinRef = useRef<HTMLInputElement>(null);
 
   const signIn = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: vendorBaseUrl,
+      baseURL: process.env.REACT_APP_VENDOR_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
       showAlert({ msg: 'An error occured while creating your pin' });
-      navigate('/vendor/login');
+      navigate('/vendor');
       return;
     }
 

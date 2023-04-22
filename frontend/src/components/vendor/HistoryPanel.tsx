@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 
 import HistoryCard from './HistoryCard';
-import { ExtraStyle, StudentHistoryData } from '../../interfaces';
+import { ExtraStyle, VendorHistoryData } from '../../interfaces';
 
 interface Props {
-  history: StudentHistoryData[];
   panelExpanded?: boolean;
   extraStyles?: ExtraStyle;
+  history: VendorHistoryData[];
 }
 
 const HistoryPanel: React.FC<Props> = ({ history, panelExpanded, extraStyles }) => {
@@ -33,18 +33,19 @@ const HistoryPanel: React.FC<Props> = ({ history, panelExpanded, extraStyles }) 
 
       {history
         .slice(0, MAX_HISTORY)
-        .map(({ _id, date_time, amount, alert, vendor, status }, index) => {
+        .map(({ _id, date_time, amount, alert, student, status, transaction_ref }, index) => {
           return (
             <HistoryCard
               id={_id}
               key={_id}
               index={index}
-              title={vendor}
+              title={student}
               date={date_time}
               description={status}
               transactionType={alert}
               transactionAmount={amount}
               panelExpanded={panelExpanded}
+              transactionRef={transaction_ref}
             />
           );
         })}

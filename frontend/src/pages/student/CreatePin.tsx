@@ -8,17 +8,13 @@ import BackButton from '../../components/BackButton';
 
 import { CreatePinPayload } from '../../interfaces';
 
-interface Props {
-  studentBaseUrl: string;
-}
-
-const CreatePin: React.FC<Props> = ({ studentBaseUrl }) => {
+const CreatePin = () => {
   const navigate = useNavigate();
   const pinRef = useRef<HTMLInputElement>(null);
 
   const signIn = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL: process.env.REACT_APP_STUDENT_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 

@@ -14,11 +14,7 @@ import { showAlert, showInfo, togglePassword } from '../../utils';
 
 import HistoryPanel from '../../components/student/HistoryPanel';
 
-interface Props {
-  studentBaseUrl: string;
-}
-
-const Home: React.FC<Props> = ({ studentBaseUrl }) => {
+const Home = () => {
   const navigate = useNavigate();
 
   const balanceRef = useRef<HTMLInputElement>(null);
@@ -36,7 +32,7 @@ const Home: React.FC<Props> = ({ studentBaseUrl }) => {
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: studentBaseUrl,
+      baseURL: process.env.REACT_APP_STUDENT_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 

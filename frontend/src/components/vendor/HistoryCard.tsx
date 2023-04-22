@@ -1,7 +1,11 @@
 import { useRef } from 'react';
-import { TransactionType } from '../../types';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-import { showInfo } from '../../utils';
+import { TransactionType } from '../../types';
+import { showAlert, showInfo } from '../../utils';
+import { RefundPayload, RefundResponse } from '../../interfaces';
 
 import paidImage from '../../assets/svgs/paid.svg';
 import receivedImage from '../../assets/svgs/received.svg';
@@ -12,6 +16,7 @@ interface Props {
   title: string;
   index: number;
   description: string;
+  transactionRef: string;
   panelExpanded?: boolean;
   transactionAmount: number;
   transactionType: TransactionType;
@@ -24,15 +29,41 @@ const HistoryCard: React.FC<Props> = ({
   title,
   description,
   panelExpanded,
+  transactionRef,
   transactionType,
   transactionAmount,
 }) => {
+  const navigate = useNavigate();
   const newDate = new Date(date);
   const matricRef = useRef<HTMLInputElement>(null);
 
   const refund = () => {
-    // logic for refunding should be implemented here
-    showInfo({});
+    const generalInfoConfig: AxiosRequestConfig = {
+      baseURL: process.env.REACT_APP_VENDOR_API!,
+    };
+    const token: string | undefined = Cookies.get('token-payvry');
+
+    if (!token) {
+      showAlert({ msg: 'An error occured while creating your pin' });
+      navigate('/vendor');
+      return;
+    }
+
+    const payload: RefundPayload = {
+      token,
+      transaction_ref: transactionRef,
+      amount: transactionAmount.toString(),
+      matricNumber: matricRef.current!.value,
+    };
+
+    axios
+      .post('/refund', payload, generalInfoConfig)
+      .then(res => {
+        const response: RefundResponse = res.data;
+        showAlert({ msg: response.message });
+        showInfo({});
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
   return (

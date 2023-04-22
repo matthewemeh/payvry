@@ -11,6 +11,16 @@ interface HistoryData {
   status: TransactionStatus;
 }
 
+interface User {
+  _id: string;
+  __v?: number;
+  pin: string;
+  balance: number;
+  password: string;
+  phoneNumber: string;
+  verificationStatus: boolean;
+}
+
 export interface StudentHistoryData extends HistoryData {
   vendor: string;
 }
@@ -22,16 +32,6 @@ export interface VendorHistoryData extends HistoryData {
 
 export interface ExtraStyle {
   [key: string]: string | number;
-}
-
-interface User {
-  _id: string;
-  __v?: number;
-  pin: string;
-  balance: number;
-  password: string;
-  phoneNumber: string;
-  verificationStatus: boolean;
 }
 
 export interface Student extends User {
@@ -152,4 +152,14 @@ export interface RefundPayload {
 export interface RefundResponse {
   message: string;
   refundTransaction: VendorHistoryData;
+}
+
+export interface StudentTokenResponse {
+  token: string;
+  student: Student;
+}
+
+export interface VendorTokenResponse {
+  token: string;
+  vendor: Vendor;
 }
