@@ -61,7 +61,7 @@ const Home = () => {
 
     const paystack = new PaystackPop();
     paystack.newTransaction({
-      key: 'pk_test_f10a3be05c1ae77ea713135351d4508fedffd92a',
+      key: process.env.REACT_APP_PAYSTACK_KEY!,
       amount,
       email,
     });
