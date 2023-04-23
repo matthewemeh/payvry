@@ -137,7 +137,6 @@ const ReceiveMoney = () => {
 
           <input
             type='text'
-            value={matricNumber}
             placeholder='Matric number'
             onChange={e => {
               setMatricNumber(e.target.value);
@@ -150,7 +149,6 @@ const ReceiveMoney = () => {
           <input
             type='text'
             placeholder='Amount'
-            value={amount.toString()}
             onChange={e => setAmount(Number(e.target.value))}
             className='mt-5 bg-gallery rounded-[100px] py-[15px] px-5 w-full placeholder:font-light text-[13px] leading-4 placeholder:text-mine-shaft tracking-[0.06em]'
           />

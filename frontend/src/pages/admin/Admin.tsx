@@ -18,10 +18,10 @@ const Admin = () => {
           Enter the admin passcode to continue
         </p>
         <input
-          ref={passwordRef}
-          className='mt-[54px] rounded-[100px] bg-gallery py-[15px] px-[20px] w-full placeholder:text-mine-shaft placeholder:font-light text-[13px] leading-4 tracking-[0.06em] '
           type='password'
+          ref={passwordRef}
           placeholder='Password'
+          className='mt-[54px] rounded-[100px] bg-gallery py-[15px] px-[20px] w-full placeholder:text-mine-shaft placeholder:font-light text-[13px] leading-4 tracking-[0.06em] '
         />
         <button
           className='mt-5 font-medium text-[15px] leading-[18px] text-white rounded-[100px] bg-mine-shaft py-[15px] w-full'
