@@ -64,14 +64,15 @@ const UpdatePin = () => {
 
   const sendOtp = () => {
     const serviceID = process.env.REACT_APP_SERVICE_ID!;
-    const templateID = process.env.REACT_APP_TEMPLATE_ID!;
     const publicKey = process.env.REACT_APP_PUBLIC_KEY!;
+    const templateID = process.env.REACT_APP_TEMPLATE_ID!;
 
     emailjs
       .sendForm(serviceID, templateID, formRef.current!, publicKey)
       .then(() => {
-        showAlert({ msg: `OTP has been sent to ${email}` });
+        setOtp('');
         showInfo({ classTarget: '.confirm-otp-modal' });
+        showAlert({ msg: `OTP has been sent to ${email}` });
       })
       .catch(() => showAlert({ msg: 'An error occured while sending email. Please try again' }));
   };
@@ -79,7 +80,9 @@ const UpdatePin = () => {
   const confirmOtp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (enteredOtp === otp) {
+    const encryptedOtp: string = localStorage.getItem('otp-payvry')!;
+
+    if (enteredOtp === decryptOtp(encryptedOtp)) {
       showAlert({ msg: 'Validation successful' });
       showInfo({ classTarget: '.set-pin-modal' });
     } else showAlert({ msg: 'Incorrect code' });

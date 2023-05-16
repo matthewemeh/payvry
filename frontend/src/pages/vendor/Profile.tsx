@@ -37,7 +37,13 @@ const Profile = () => {
     };
 
     // implement update of vendor's details using axios here
-    navigate('/vendor');
+    axios
+      .put('/update', payload, generalInfoConfig)
+      .then(res => {
+        showAlert({ msg: 'Your details have been updated!' });
+        navigate('/vendor');
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
   // componentDidMount
@@ -60,9 +66,8 @@ const Profile = () => {
       .then(res => {
         const response: VendorResponse = res.data;
         const { vendor } = response;
-        const { password, phoneNumber, vendorName, vendorOwner, vendorUsername } = vendor;
+        const { phoneNumber, vendorName, vendorOwner, vendorUsername } = vendor;
 
-        passwordRef.current!.defaultValue = password;
         vendorNameRef.current!.defaultValue = vendorName;
         vendorOwnerRef.current!.defaultValue = vendorOwner;
         usernameRef.current!.defaultValue = vendorUsername;

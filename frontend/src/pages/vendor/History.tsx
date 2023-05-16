@@ -57,11 +57,18 @@ const History = () => {
       .post('/vendor', payload, generalInfoConfig)
       .then(res => {
         const response: VendorResponse = res.data;
-        const { vendor, vendorTransaction } = response;
-        const { balance } = vendor;
+        const { vendorTransaction } = response;
 
-        setBalance(balance);
         setHistory(vendorTransaction);
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+
+    axios
+      .post('/balance', payload, generalInfoConfig)
+      .then(res => {
+        const response: { message: number } = res.data;
+
+        setBalance(response.message);
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);
@@ -76,16 +83,16 @@ const History = () => {
         <p className='mt-[11px] mb-[30px] font-medium text-[16px] leading-7 text-[rgba(0,0,0,0.5)]'>
           Select a duration to filter your transaction history from
         </p>
-        {durationOptions.map(dur => (
+        {durationOptions.map(duration => (
           <button
-            key={dur}
+            key={duration}
             onClick={() => {
-              setDuration(dur);
+              setDuration(duration);
               showInfo({});
             }}
             className='block my-[10px] capitalize font-medium text-[16px] leading-[21px]'
           >
-            {dur}
+            {duration}
           </button>
         ))}
       </div>

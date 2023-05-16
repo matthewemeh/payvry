@@ -33,13 +33,13 @@ const HistoryPanel: React.FC<Props> = ({ history, panelExpanded, extraStyles }) 
 
       {history
         .slice(0, MAX_HISTORY)
-        .map(({ _id, date_time, amount, alert, student, status, transaction_ref }, index) => {
+        .map(({ _id, date_time, amount, alert, user, status, transaction_ref }, index) => {
           return (
             <HistoryCard
               id={_id}
               key={_id}
+              title={user}
               index={index}
-              title={student}
               date={date_time}
               description={status}
               transactionType={alert}

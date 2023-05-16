@@ -1,4 +1,38 @@
-import { AlertProps, InfoProps } from './interfaces';
+import { AlertProps, FormatInputText, OtpHashMap, InfoProps } from './interfaces';
+
+export const formatInputText = ({
+  text,
+  regex,
+  allowedChars,
+  disallowedChars,
+}: FormatInputText): string => {
+  let newValue: string = text;
+  const characters: string[] = text.split('');
+
+  if (allowedChars) {
+    newValue = characters.map(char => (allowedChars.includes(char) ? char : '')).join('');
+  } else if (disallowedChars) {
+    newValue = characters.map(char => (disallowedChars.includes(char) ? '' : char)).join('');
+  } else if (regex) {
+    // this tests each individual character and not the string as a whole
+    newValue = characters.map(char => (regex.test(char) ? char : '')).join('');
+  }
+
+  return newValue;
+};
+
+const getRndInteger = (min: number, max: number): number => {
+  // returns a random integer from min to (max - 1)
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+export const getOtp = (digits: number) => {
+  let otp = '';
+
+  for (let i = 0; i < digits; i++) otp += getRndInteger(0, 10).toString();
+
+  return otp;
+};
 
 export const togglePassword = (element: React.RefObject<HTMLInputElement>) => {
   const inputElement = element.current;
@@ -75,4 +109,40 @@ export const showInfo = ({ classTarget, xPos, yPos }: InfoProps) => {
 
   // ...afterwards block-off interaction with other elements
   removeClass(infoBubblesContainer, 'hidden');
+};
+
+const hashMap: OtpHashMap = {
+  '0': '?',
+  '1': '@',
+  '2': '#',
+  '3': '&',
+  '4': '$',
+  '5': '%',
+  '6': '^',
+  '7': '!',
+  '8': '~',
+  '9': '+',
+};
+
+export const encryptOtp = (otp: string): string => {
+  let encryptedOtp = '';
+
+  for (let i = 0; i < otp.length; i++) {
+    const char = otp.charAt(i);
+    encryptedOtp += char in hashMap ? hashMap[otp.charAt(i)] : '';
+  }
+
+  return encryptedOtp;
+};
+
+export const decryptOtp = (otp: string): string => {
+  let decryptedOtp = '';
+  let values: string[] = Object.values(hashMap);
+
+  for (let i = 0; i < otp.length; i++) {
+    const char = otp.charAt(i);
+    decryptedOtp += values.findIndex(c => c === char).toString();
+  }
+
+  return decryptedOtp;
 };

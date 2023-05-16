@@ -42,12 +42,20 @@ const Home = () => {
       .then(res => {
         const response: VendorResponse = res.data;
         const { vendor, vendorTransaction } = response;
-        const { vendorOwner, balance } = vendor;
-
-        balanceRef.current!.value = `C${balance.toLocaleString()}`;
+        const { vendorOwner } = vendor;
 
         setFullName(vendorOwner);
         setHistory(vendorTransaction);
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+
+    axios
+      .post('/balance', payload, generalInfoConfig)
+      .then(res => {
+        const response: { message: number } = res.data;
+        const balance: number = response.message;
+
+        balanceRef.current!.value = `C${balance.toLocaleString()}`;
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);
