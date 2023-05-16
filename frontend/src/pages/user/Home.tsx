@@ -9,9 +9,9 @@ import chatImage from '../../assets/svgs/chat.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import { showAlert, showInfo, togglePassword } from '../../utils';
-import { StudentHistoryData, StudentResponse } from '../../interfaces';
+import { UserHistoryData, UserResponse } from '../../interfaces';
 
-import HistoryPanel from '../../components/student/HistoryPanel';
+import HistoryPanel from '../../components/user/HistoryPanel';
 
 const PaystackPop = require('@paystack/inline-js');
 
@@ -24,18 +24,18 @@ const Home = () => {
   const [email, setEmail] = useState('');
   const [amount, setAmount] = useState('');
   const [fullName, setFullName] = useState('');
-  const [history, setHistory] = useState<StudentHistoryData[]>([]);
+  const [history, setHistory] = useState<UserHistoryData[]>([]);
 
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: process.env.REACT_APP_STUDENT_API!,
+      baseURL: process.env.REACT_APP_USER_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
       showAlert({ msg: 'An error occured while getting your details' });
-      navigate('/student/login');
+      navigate('/user/login');
       return;
     }
 
@@ -44,14 +44,22 @@ const Home = () => {
     axios
       .post('/user', payload, generalInfoConfig)
       .then(res => {
-        const response: StudentResponse = res.data;
-        const { student, studentTransaction } = response;
-        const { fullName, balance } = student;
-
-        balanceRef.current!.value = `C${balance.toLocaleString()}`;
+        const response: UserResponse = res.data;
+        const { user, userTransaction } = response;
+        const { fullName } = user;
 
         setFullName(fullName);
-        setHistory(studentTransaction);
+        setHistory(userTransaction);
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+
+    axios
+      .post('/balance', payload, generalInfoConfig)
+      .then(res => {
+        const response: { message: number } = res.data;
+        const balance: number = response.message;
+
+        balanceRef.current!.value = `C${balance.toLocaleString()}`;
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);
@@ -71,7 +79,7 @@ const Home = () => {
     <main className='px-5 pt-[59px] tracking-[0.04em] pb-[57px]'>
       <header className='flex items-center justify-between text-center'>
         <Link
-          to='/student/profile'
+          to='/user/profile'
           className='w-[50px] h-[50px] rounded-full grid place-items-center border-[1px] border-alto'
         >
           <img src={userImage} alt='' />
@@ -80,7 +88,7 @@ const Home = () => {
         <h1 className='font-semibold text-[18px] leading-[30px]'>Hello {fullName}</h1>
 
         <Link
-          to='/student/profile'
+          to='/user/profile'
           className='w-[50px] h-[50px] rounded-full grid place-items-center border-[1px] border-alto'
         >
           <img src={chatImage} alt='' />

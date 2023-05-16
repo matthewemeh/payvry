@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
@@ -7,18 +7,16 @@ import eyeImage from '../../assets/svgs/eye.svg';
 import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import { showAlert, togglePassword } from '../../utils';
-import { StudentProfileUpdatePayload, StudentResponse } from '../../interfaces';
+import { User, UserProfileUpdatePayload, UserResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const baseURL = process.env.REACT_APP_STUDENT_API!;
+  const baseURL = process.env.REACT_APP_USER_API!;
 
   const [pwdHidden, setPwdHidden] = useState(true);
-  const [pinHidden, setPinHidden] = useState(true);
 
-  const pinRef = useRef<HTMLInputElement>(null);
   const matricRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const fullNameRef = useRef<HTMLInputElement>(null);
@@ -29,16 +27,20 @@ const Profile = () => {
       baseURL,
     };
 
-    const payload: StudentProfileUpdatePayload = {
-      pin: pinRef.current!.value,
+    const payload: UserProfileUpdatePayload = {
       fullName: fullNameRef.current!.value,
       password: passwordRef.current!.value,
       phoneNumber: phoneNumberRef.current!.value,
       matricNumber: matricRef.current!.value.toLowerCase(),
     };
 
-    // implement update of student's details using axios here
-    navigate('/student');
+    axios
+      .put('/update', payload, generalInfoConfig)
+      .then(res => {
+        showAlert({ msg: 'Your details have been updated!' });
+        navigate('/user');
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
 
   // componentDidMount
@@ -50,7 +52,7 @@ const Profile = () => {
 
     if (!token) {
       showAlert({ msg: 'An error occured while accessing your details' });
-      navigate('/student');
+      navigate('/user');
       return;
     }
 
@@ -59,13 +61,11 @@ const Profile = () => {
     axios
       .post('/user', payload, generalInfoConfig)
       .then(res => {
-        const response: StudentResponse = res.data;
-        const { student } = response;
-        const { pin, fullName, password, matricNumber, phoneNumber } = student;
+        const response: UserResponse = res.data;
+        const { user } = response;
+        const { fullName, matricNumber, phoneNumber } = user;
 
-        pinRef.current!.defaultValue = pin;
         fullNameRef.current!.defaultValue = fullName;
-        passwordRef.current!.defaultValue = password;
         matricRef.current!.defaultValue = matricNumber;
         phoneNumberRef.current!.defaultValue = phoneNumber;
       })
@@ -87,7 +87,7 @@ const Profile = () => {
             autoCorrect='off'
             autoComplete='off'
             placeholder='Matric number'
-            className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px] uppercase'
+            className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
           />
         </label>
 
@@ -139,34 +139,19 @@ const Profile = () => {
           />
         </label>
 
-        <label htmlFor='pin' className='relative'>
-          <span className='mx-5'>Pin</span>
-          <input
-            id='pin'
-            type='password'
-            ref={pinRef}
-            autoCorrect='off'
-            autoComplete='off'
-            placeholder='Enter your 6-digit pin'
-            className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5 mt-[10px]'
-          />
-          <img
-            alt=''
-            onClick={() => {
-              togglePassword(pinRef);
-              setPinHidden(!pinHidden);
-            }}
-            src={pinHidden ? eyeImage : eyeSlashImage}
-            className='w-5 h-5 absolute top-[55%] right-[17px] cursor-pointer'
-          />
-        </label>
-
         <button
           onClick={updateProfile}
           className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-[10px] font-medium text-[15px] leading-[18px]'
         >
           Update
         </button>
+
+        <Link
+          to='/user/update-pin'
+          className='font-normal text-[14px] leading-7 tracking-[0.06em] text-mine-shaft text-center'
+        >
+          Update your pin
+        </Link>
       </div>
     </main>
   );
