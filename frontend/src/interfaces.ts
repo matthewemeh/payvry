@@ -11,22 +11,22 @@ interface HistoryData {
   status: TransactionStatus;
 }
 
-interface User {
+interface BaseUser {
   _id: string;
   __v?: number;
-  pin: string;
-  balance: number;
+  setPin: boolean;
   password: string;
+  createdAt?: string;
+  updatedAt?: string;
   phoneNumber: string;
-  verificationStatus: boolean;
 }
 
-export interface StudentHistoryData extends HistoryData {
+export interface UserHistoryData extends HistoryData {
   vendor: string;
 }
 
 export interface VendorHistoryData extends HistoryData {
-  student: string;
+  user: string;
   refund_ref?: string;
 }
 
@@ -34,12 +34,12 @@ export interface ExtraStyle {
   [key: string]: string | number;
 }
 
-export interface Student extends User {
+export interface User extends BaseUser {
   fullName: string;
   matricNumber: string;
 }
 
-export interface Vendor extends User {
+export interface Vendor extends BaseUser {
   vendorName: string;
   vendorOwner: string;
   vendorUsername: string;
@@ -49,7 +49,7 @@ export interface Transaction {
   to: string;
   from: string;
   date: string;
-  studentName: string;
+  userName: string;
   paymentType: PaymentType;
 }
 
@@ -67,19 +67,19 @@ export interface InfoProps {
   classTarget?: string;
 }
 
-export interface StudentResponse {
+export interface UserResponse {
+  user: User;
   message: string;
-  student: Student;
-  studentTransaction: StudentHistoryData[];
+  userTransaction: UserHistoryData[];
 }
 
 export interface VendorResponse {
-  message: string;
   vendor: Vendor;
+  message: string;
   vendorTransaction: VendorHistoryData[];
 }
 
-export interface StudentLoginPayload {
+export interface UserLoginPayload {
   password: string;
   matricNumber: string;
 }
@@ -89,7 +89,7 @@ export interface VendorLoginPayload {
   vendorUsername: string;
 }
 
-export interface StudentSignupPayload {
+export interface UserSignupPayload {
   fullName: string;
   password: string;
   phoneNumber: string;
@@ -109,20 +109,19 @@ export interface CreatePinPayload {
   token: string;
 }
 
-export interface StudentProfileUpdatePayload {
-  pin: string;
-  fullName: string;
-  password: string;
-  phoneNumber: string;
-  matricNumber: string;
+export interface UserProfileUpdatePayload {
+  fullName?: string;
+  password?: string;
+  phoneNumber?: string;
+  matricNumber?: string;
 }
 
 export interface VendorProfileUpdatePayload {
-  password: string;
-  vendorName: string;
-  phoneNumber: string;
-  vendorOwner: string;
-  vendorUsername: string;
+  password?: string;
+  vendorName?: string;
+  phoneNumber?: string;
+  vendorOwner?: string;
+  vendorUsername?: string;
 }
 
 export interface PaymentPayload {
@@ -154,12 +153,23 @@ export interface RefundResponse {
   refundTransaction: VendorHistoryData;
 }
 
-export interface StudentTokenResponse {
+export interface UserTokenResponse {
   token: string;
-  student: Student;
+  user: User;
 }
 
 export interface VendorTokenResponse {
   token: string;
   vendor: Vendor;
+}
+
+export interface FormatInputText {
+  text: string;
+  regex?: RegExp;
+  allowedChars?: string;
+  disallowedChars?: string;
+}
+
+export interface OtpHashMap {
+  [key: string]: string;
 }
