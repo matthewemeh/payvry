@@ -15,7 +15,7 @@ const Landing = () => {
 
       <div className='w-full mt-[70px] flex justify-between text-white font-semibold text-[18px] leading-[21px] max-w-[400px]'>
         <Link
-          to='/student/login'
+          to='/user/login'
           className='w-[141px] h-[137px] rounded-[100px] grid place-items-center bg-fountain-blue'
         >
           Student

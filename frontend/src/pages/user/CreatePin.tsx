@@ -1,40 +1,40 @@
-import { useRef } from 'react';
 import Cookies from 'js-cookie';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
-import { showAlert } from '../../utils';
 import BackButton from '../../components/BackButton';
+import { formatInputText, showAlert } from '../../utils';
 
 import { CreatePinPayload } from '../../interfaces';
 
 const CreatePin = () => {
   const navigate = useNavigate();
-  const pinRef = useRef<HTMLInputElement>(null);
+  const [pin, setPin] = useState('');
 
-  const signIn = () => {
+  const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: process.env.REACT_APP_STUDENT_API!,
+      baseURL: process.env.REACT_APP_USER_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
       showAlert({ msg: 'An error occured while creating your pin' });
-      navigate('/student/login');
+      navigate('/user/login');
       return;
     }
 
-    const payload: CreatePinPayload = {
-      token,
-      pin: pinRef.current!.value,
-    };
+    const payload: CreatePinPayload = { token, pin };
 
     axios
       .post('/setpin', payload, generalInfoConfig)
       .then(res => {
         const response: { message: string } = res.data;
+
         showAlert({ msg: response.message });
-        navigate('/student');
+        navigate('/user');
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
@@ -50,24 +50,31 @@ const CreatePin = () => {
         Your 6-digit pin will serve as your payment pin. Try not to disclose to anyone.
       </p>
 
-      <div className='font-light text-[13px] leading-4 tracking-[0.06em] mt-[54px] max-w-[400px]'>
+      <form
+        onSubmit={signIn}
+        className='font-light text-[13px] leading-4 tracking-[0.06em] mt-[54px] max-w-[400px]'
+      >
         <input
+          required
           type='text'
-          ref={pinRef}
+          value={pin}
+          minLength={6}
           maxLength={6}
           autoCorrect='off'
           autoComplete='off'
           placeholder='6-digit pin'
+          onChange={e =>
+            setPin(formatInputText({ text: e.target.value, allowedChars: '0123456789' }))
+          }
           className='placeholder:text-mine-shaft bg-grey-200 w-full rounded-[100px] py-[15px] px-5'
         />
 
-        <button
-          onClick={signIn}
-          className='bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-5 font-medium text-[15px] leading-[18px] tracking-[0.06em]'
-        >
-          Sign in
-        </button>
-      </div>
+        <input
+          type='submit'
+          value='Sign in'
+          className='cursor-pointer bg-mine-shaft text-white w-full py-[15px] rounded-[100px] mt-5 font-medium text-[15px] leading-[18px] tracking-[0.06em]'
+        />
+      </form>
     </main>
   );
 };

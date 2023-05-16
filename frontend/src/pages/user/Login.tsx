@@ -10,7 +10,7 @@ import eyeSlashImage from '../../assets/svgs/eye-slash.svg';
 
 import BackButton from '../../components/BackButton';
 
-import { StudentLoginPayload, StudentTokenResponse } from '../../interfaces';
+import { UserLoginPayload, UserTokenResponse } from '../../interfaces';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,10 +21,10 @@ const Login = () => {
 
   const login = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: process.env.REACT_APP_STUDENT_API!,
+      baseURL: process.env.REACT_APP_USER_API!,
     };
 
-    const payload: StudentLoginPayload = {
+    const payload: UserLoginPayload = {
       password: passwordRef.current!.value,
       matricNumber: matricRef.current!.value.toLowerCase(),
     };
@@ -32,9 +32,9 @@ const Login = () => {
     axios
       .post('/login', payload, generalInfoConfig)
       .then(res => {
-        const response: StudentTokenResponse = res.data;
+        const response: UserTokenResponse = res.data;
         Cookies.set('token-payvry', response.token);
-        navigate('/student');
+        navigate('/user');
       })
       .catch((error: AxiosError) => {
         const errorCode = error.response!.status;
@@ -101,7 +101,7 @@ const Login = () => {
 
         <p className='mt-5 font-normal text-[14px] leading-7 tracking-[0.06em] text-mine-shaft text-center'>
           Don't have an account?{' '}
-          <Link to='/student/sign-up' className='font-bold'>
+          <Link to='/user/sign-up' className='font-bold'>
             Sign up
           </Link>
         </p>

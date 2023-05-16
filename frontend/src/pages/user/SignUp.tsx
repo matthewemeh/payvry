@@ -6,7 +6,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { showAlert } from '../../utils';
 import BackButton from '../../components/BackButton';
 
-import { StudentSignupPayload, StudentTokenResponse } from '../../interfaces';
+import { UserSignupPayload, UserTokenResponse } from '../../interfaces';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -18,10 +18,10 @@ const SignUp = () => {
 
   const signUp = () => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: process.env.REACT_APP_STUDENT_API!,
+      baseURL: process.env.REACT_APP_USER_API!,
     };
 
-    const payload: StudentSignupPayload = {
+    const payload: UserSignupPayload = {
       fullName: fullNameRef.current!.value,
       password: passwordRef.current!.value,
       phoneNumber: phoneNumberRef.current!.value,
@@ -31,9 +31,9 @@ const SignUp = () => {
     axios
       .post('/signup', payload, generalInfoConfig)
       .then(res => {
-        const response: StudentTokenResponse = res.data;
+        const response: UserTokenResponse = res.data;
         Cookies.set('token-payvry', response.token);
-        navigate('/student/create-pin');
+        navigate('/user/create-pin');
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   };
@@ -89,7 +89,7 @@ const SignUp = () => {
 
         <p className='mt-5 font-normal text-[14px] leading-7 tracking-[0.06em] text-mine-shaft text-center'>
           Already have an account?{' '}
-          <Link to='/student/login' className='font-bold'>
+          <Link to='/user/login' className='font-bold'>
             Login
           </Link>
         </p>

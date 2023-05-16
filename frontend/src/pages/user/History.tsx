@@ -4,10 +4,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 import { HistoryDuration } from '../../types';
-import { StudentHistoryData, StudentResponse } from '../../interfaces';
+import { UserHistoryData, UserResponse } from '../../interfaces';
 
 import BackButton from '../../components/BackButton';
-import HistoryPanel from '../../components/student/HistoryPanel';
+import HistoryPanel from '../../components/user/HistoryPanel';
 
 import paidImage from '../../assets/svgs/paid.svg';
 import receivedImage from '../../assets/svgs/received.svg';
@@ -19,7 +19,7 @@ const History = () => {
   const navigate = useNavigate();
 
   const [balance, setBalance] = useState(0);
-  const [history, setHistory] = useState<StudentHistoryData[]>([]);
+  const [history, setHistory] = useState<UserHistoryData[]>([]);
   const durationOptions: HistoryDuration[] = [
     'last 7 days',
     'last 30 days',
@@ -41,13 +41,13 @@ const History = () => {
   // componentDidMount
   useEffect(() => {
     const generalInfoConfig: AxiosRequestConfig = {
-      baseURL: process.env.REACT_APP_STUDENT_API!,
+      baseURL: process.env.REACT_APP_USER_API!,
     };
     const token: string | undefined = Cookies.get('token-payvry');
 
     if (!token) {
       showAlert({ msg: 'An error occured while accessing history' });
-      navigate('/student');
+      navigate('/user');
       return;
     }
 
@@ -56,12 +56,19 @@ const History = () => {
     axios
       .post('/user', payload, generalInfoConfig)
       .then(res => {
-        const response: StudentResponse = res.data;
-        const { student, studentTransaction } = response;
-        const { balance } = student;
+        const response: UserResponse = res.data;
+        const { userTransaction } = response;
 
-        setBalance(balance);
-        setHistory(studentTransaction);
+        setHistory(userTransaction);
+      })
+      .catch((error: AxiosError) => showAlert({ msg: error.message }));
+
+    axios
+      .post('/balance', payload, generalInfoConfig)
+      .then(res => {
+        const response: { message: number } = res.data;
+
+        setBalance(response.message);
       })
       .catch((error: AxiosError) => showAlert({ msg: error.message }));
   }, []);
@@ -76,16 +83,16 @@ const History = () => {
         <p className='mt-[11px] mb-[30px] font-medium text-[16px] leading-7 text-[rgba(0,0,0,0.5)]'>
           Select a duration to filter your transaction history from
         </p>
-        {durationOptions.map(dur => (
+        {durationOptions.map(duration => (
           <button
-            key={dur}
+            key={duration}
             onClick={() => {
-              setDuration(dur);
+              setDuration(duration);
               showInfo({});
             }}
             className='block my-[10px] capitalize font-medium text-[16px] leading-[21px]'
           >
-            {dur}
+            {duration}
           </button>
         ))}
       </div>

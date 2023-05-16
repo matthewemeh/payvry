@@ -2,14 +2,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Landing from './pages/Landing';
 
-import HomeStudent from './pages/student/Home';
-import LoginStudent from './pages/student/Login';
-import SignUpStudent from './pages/student/SignUp';
-import HistoryStudent from './pages/student/History';
-import ProfileStudent from './pages/student/Profile';
-import CreatePinStudent from './pages/student/CreatePin';
-import SendMoneyStudent from './pages/student/SendMoney';
-import ReceiveMoneyStudent from './pages/student/ReceiveMoney';
+import HomeUser from './pages/user/Home';
+import LoginUser from './pages/user/Login';
+import SignUpUser from './pages/user/SignUp';
+import HistoryUser from './pages/user/History';
+import ProfileUser from './pages/user/Profile';
+import CreatePinUser from './pages/user/CreatePin';
+import SendMoneyUser from './pages/user/SendMoney';
+import UpdatePinUser from './pages/user/UpdatePin';
+import ReceiveMoneyUser from './pages/user/ReceiveMoney';
 
 import HomeVendor from './pages/vendor/Home';
 import LoginVendor from './pages/vendor/Login';
@@ -28,14 +29,15 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Landing />}></Route>
 
-        <Route path='/student' element={<HomeStudent />}></Route>
-        <Route path='/student/login' element={<LoginStudent />}></Route>
-        <Route path='/student/sign-up' element={<SignUpStudent />}></Route>
-        <Route path='/student/history' element={<HistoryStudent />}></Route>
-        <Route path='/student/profile' element={<ProfileStudent />}></Route>
-        <Route path='/student/create-pin' element={<CreatePinStudent />}></Route>
-        <Route path='/student/send-money' element={<SendMoneyStudent />}></Route>
-        <Route path='/student/receive-money' element={<ReceiveMoneyStudent />}></Route>
+        <Route path='/user' element={<HomeUser />}></Route>
+        <Route path='/user/login' element={<LoginUser />}></Route>
+        <Route path='/user/sign-up' element={<SignUpUser />}></Route>
+        <Route path='/user/history' element={<HistoryUser />}></Route>
+        <Route path='/user/profile' element={<ProfileUser />}></Route>
+        <Route path='/user/create-pin' element={<CreatePinUser />}></Route>
+        <Route path='/user/send-money' element={<SendMoneyUser />}></Route>
+        <Route path='/user/update-pin' element={<UpdatePinUser />}></Route>
+        <Route path='/user/receive-money' element={<ReceiveMoneyUser />}></Route>
 
         <Route path='/vendor' element={<HomeVendor />}></Route>
         <Route path='/vendor/login' element={<LoginVendor />}></Route>

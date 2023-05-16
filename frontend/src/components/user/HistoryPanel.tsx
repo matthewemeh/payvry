@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 
 import HistoryCard from './HistoryCard';
-import { ExtraStyle, StudentHistoryData } from '../../interfaces';
+import { ExtraStyle, UserHistoryData } from '../../interfaces';
 
 interface Props {
   panelExpanded?: boolean;
   extraStyles?: ExtraStyle;
-  history: StudentHistoryData[];
+  history: UserHistoryData[];
 }
 
 const HistoryPanel: React.FC<Props> = ({ history, panelExpanded, extraStyles }) => {
@@ -23,7 +23,7 @@ const HistoryPanel: React.FC<Props> = ({ history, panelExpanded, extraStyles }) 
         <>
           <h3 className='font-semibold text-[18px] leading-[23px]'>History</h3>
           <Link
-            to='/student/history'
+            to='/user/history'
             className='absolute right-[25px] top-5 font-normal text-[17px] leading-[17px]'
           >
             View all

@@ -10,28 +10,28 @@ const Home = () => {
       to: 'Blosom kitchen',
       from: 'clu200203-442',
       paymentType: 'refund',
-      studentName: 'Korede Bakare',
+      userName: 'Korede Bakare',
       date: '2023-03-24T17:03:00Z',
     },
     {
       to: 'Blosom kitchen',
       from: 'clu200203-442',
       paymentType: 'purchase',
-      studentName: 'Korede Bakare',
+      userName: 'Korede Bakare',
       date: '2023-03-24T17:03:00Z',
     },
     {
       to: 'Blosom kitchen',
       from: 'clu200203-442',
       paymentType: 'withdrawal',
-      studentName: 'Korede Bakare',
+      userName: 'Korede Bakare',
       date: '2023-03-24T17:03:00Z',
     },
     {
       to: 'Blosom kitchen',
       from: 'clu200203-442',
       paymentType: 'account top-up',
-      studentName: 'Korede Bakare',
+      userName: 'Korede Bakare',
       date: '2023-03-24T17:03:00Z',
     },
   ];
@@ -66,14 +66,14 @@ const Home = () => {
           <p>Time</p>
         </header>
         <div className='px-[34px] pt-[30px] font-medium text-[16px] leading-[27px] flex flex-col gap-y-5 capitalize'>
-          {transactions.map(({ to, from, studentName, date, paymentType }, index) => {
+          {transactions.map(({ to, from, userName, date, paymentType }, index) => {
             const newDate = new Date(date);
 
             return (
               <div className='grid grid-cols-6' key={index}>
                 <p className='uppercase'>{from}</p>
                 <p>{to}</p>
-                <p>{studentName}</p>
+                <p>{userName}</p>
                 <p>{paymentType}</p>
                 <p>{newDate.toDateString()}</p>
                 <p>{newDate.toLocaleTimeString()}</p>
