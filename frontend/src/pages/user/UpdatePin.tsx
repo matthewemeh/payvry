@@ -107,6 +107,7 @@ const UpdatePin = () => {
 
         <input
           required
+          value={pin}
           minLength={6}
           maxLength={6}
           type='password'
