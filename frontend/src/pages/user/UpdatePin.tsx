@@ -72,9 +72,11 @@ const UpdatePin = () => {
       .then(() => {
         setOtp('');
         showInfo({ classTarget: '.confirm-otp-modal' });
-        showAlert({ msg: `OTP has been sent to ${email}` });
+        showAlert({ msg: `OTP has been sent to ${email}`, zIndex: '10' });
       })
-      .catch(() => showAlert({ msg: 'An error occured while sending email. Please try again' }));
+      .catch(() =>
+        showAlert({ msg: 'An error occured while sending email. Please try again', zIndex: '10' })
+      );
   };
 
   const confirmOtp = (e: React.FormEvent<HTMLFormElement>) => {
@@ -83,9 +85,9 @@ const UpdatePin = () => {
     const encryptedOtp: string = localStorage.getItem('otp-payvry')!;
 
     if (enteredOtp === decryptOtp(encryptedOtp)) {
-      showAlert({ msg: 'Validation successful' });
+      showAlert({ msg: 'Validation successful', zIndex: '10' });
       showInfo({ classTarget: '.set-pin-modal' });
-    } else showAlert({ msg: 'Incorrect code' });
+    } else showAlert({ msg: 'Incorrect code', zIndex: '10' });
   };
 
   return (
