@@ -86,17 +86,15 @@ export const showInfo = ({ classTarget, xPos, yPos }: InfoProps) => {
   const infoBubblesContainer = document.querySelector('.info-bubbles-container') as HTMLDivElement;
 
   // close all info bubbles...
-  infoBubbles.forEach(infoBubble => {
-    addClass(infoBubble, 'hidden');
-  });
+  infoBubbles.forEach(infoBubble => addClass(infoBubble, 'hidden'));
   addClass(infoBubblesContainer, 'hidden');
 
   if (!classTarget) return;
 
-  const currentInfoBubble = document.querySelector(classTarget) as HTMLDivElement;
+  const currentInfoBubble: HTMLDivElement | null = document.querySelector(classTarget);
   if (!currentInfoBubble) return;
 
-  // ...then reveal chosen info bubble...
+  // ...then show chosen info bubble...
   toggleClass(currentInfoBubble, 'hidden');
 
   if (xPos) {
